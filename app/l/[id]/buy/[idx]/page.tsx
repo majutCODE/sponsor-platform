@@ -1,3 +1,4 @@
+import SubmitButton from "@/components/SubmitButton";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { buyTile } from "@/app/actions";
@@ -27,7 +28,7 @@ export default async function BuyPage({ params, searchParams }: { params: Promis
       </div>
       <div>
         <Link href={`/l/${id}`} className="text-sm text-indigo-600 hover:underline">← {l.meta.title}</Link>
-        <h1 className="mt-2 text-2xl font-bold tracking-tight">Sponsor tile #{idx + 1}</h1>
+        <h1 className="mt-2 text-2xl font-semibold">Sponsor tile #{idx + 1}</h1>
         {error && <div className="mt-4"><Notice>{error}</Notice></div>}
         <form action={buyTile} className="card mt-4 space-y-4">
           <input type="hidden" name="id" value={id} />
@@ -49,19 +50,19 @@ export default async function BuyPage({ params, searchParams }: { params: Promis
             <input className="input" id="logo" name="logo" type="file" accept="image/png,image/svg+xml,image/webp,image/jpeg" required />
             <p className="mt-1 text-xs text-stone-500">PNG or SVG with a transparent background works best. Under 4 MB.</p>
           </div>
-          <div className="rounded-lg bg-stone-50 p-3 text-sm">
+          <div className="rounded-2xl bg-stone-50 p-3 text-sm">
             <div className="flex justify-between"><span>Tile</span><span>{fmt(l.meta.tilePrice)}</span></div>
             <div className="flex justify-between text-stone-500"><span>Goes to lister after verification</span><span>{fmt(l.meta.tilePrice - feeFor(l.meta.tilePrice))}</span></div>
             <div className="flex justify-between text-stone-500"><span>Platform fee</span><span>{fmt(feeFor(l.meta.tilePrice))}</span></div>
           </div>
-          <div className="rounded-lg border border-amber-200 bg-amber-50 p-3 text-xs text-amber-900">
+          <div className="rounded-2xl border border-amber-200 bg-amber-50 p-3 text-xs text-amber-900">
             Test mode: no card is charged. Real payments switch on once Stripe is connected.
           </div>
           <label className="flex items-start gap-2 text-sm text-stone-600">
             <input type="checkbox" name="agree" required className="mt-1" />
             I own the rights to this logo. My payment is held until the lister proves the logo is on the object.
           </label>
-          <button className="btn w-full">Pay {fmt(l.meta.tilePrice)}</button>
+          <SubmitButton className="w-full">Pay {fmt(l.meta.tilePrice)}</SubmitButton>
         </form>
       </div>
     </div>

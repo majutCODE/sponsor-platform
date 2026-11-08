@@ -1,3 +1,4 @@
+import SubmitButton from "@/components/SubmitButton";
 import { createListing } from "@/app/actions";
 import { Notice } from "@/components/StatusBadge";
 import { FEE_RATE } from "@/lib/money";
@@ -8,7 +9,7 @@ export default async function NewListing({ searchParams }: { searchParams: Promi
   const { error } = await searchParams;
   return (
     <div className="mx-auto max-w-2xl">
-      <h1 className="text-3xl font-bold tracking-tight">List an object</h1>
+      <h1 className="text-3xl font-semibold">List an object</h1>
       <p className="mt-2 text-stone-600">
         Brands will buy tiles on your photo. Once the logos are on the real object, upload a proof photo and we pay you
         {" "}{100 - FEE_RATE * 100}% of every tile.
@@ -58,7 +59,7 @@ export default async function NewListing({ searchParams }: { searchParams: Promi
             <input className="input" id="listerEmail" name="listerEmail" type="email" required maxLength={120} />
           </div>
         </div>
-        <button className="btn w-full">Publish listing</button>
+        <SubmitButton className="w-full">Publish listing</SubmitButton>
       </form>
     </div>
   );

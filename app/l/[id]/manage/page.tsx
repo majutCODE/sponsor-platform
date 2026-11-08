@@ -1,3 +1,4 @@
+import SubmitButton from "@/components/SubmitButton";
 import Link from "next/link";
 import { headers } from "next/headers";
 import { submitProof } from "@/app/actions";
@@ -24,9 +25,9 @@ export default async function Manage({ params, searchParams }: { params: Promise
   return (
     <div className="space-y-6">
       {sp.new && (
-        <Notice kind="info">
-          <div className="font-semibold">Your listing is live. Save this private link: it&apos;s how you manage it and get paid.</div>
-          <code className="mt-2 block break-all rounded bg-white px-2 py-1 text-xs">{manageUrl}</code>
+        <Notice kind="info" title="Your listing is live">
+          <div>Save this private link: it&apos;s how you manage it and get paid.</div>
+          <code className="mt-2 block break-all rounded-2xl border border-stone-200 bg-white px-2.5 py-1.5 text-xs">{manageUrl}</code>
         </Notice>
       )}
       {sp.submitted && <Notice kind="success">Proof submitted. We&apos;ll review it shortly.</Notice>}
@@ -35,7 +36,7 @@ export default async function Manage({ params, searchParams }: { params: Promise
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <div className="text-sm text-stone-500">Managing</div>
-          <h1 className="text-2xl font-bold tracking-tight">{l.meta.title}</h1>
+          <h1 className="text-2xl font-semibold">{l.meta.title}</h1>
         </div>
         <div className="flex items-center gap-3">
           <StatusBadge status={l.status} />
@@ -50,7 +51,7 @@ export default async function Manage({ params, searchParams }: { params: Promise
           ["Platform fee", fmt(l.fees)],
           [l.status === "paid_out" ? "Paid to you" : "Your payout", fmt(l.payout)],
         ].map(([k, v]) => (
-          <div key={k} className="card"><div className="text-xs text-stone-500">{k}</div><div className="text-xl font-bold">{v}</div></div>
+          <div key={k} className="card"><div className="text-xs text-stone-500">{k}</div><div className="mt-1 text-2xl font-semibold tabular-nums">{v}</div></div>
         ))}
       </div>
 
@@ -88,7 +89,7 @@ export default async function Manage({ params, searchParams }: { params: Promise
           {l.latestProof && l.status !== "proof_rejected" && (
             <>
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={l.latestProof.proofUrl} alt="Your proof" className="mb-3 w-full rounded-lg" />
+              <img src={l.latestProof.proofUrl} alt="Your proof" className="mb-3 w-full rounded-2xl" />
             </>
           )}
           {l.status === "in_review" && <p className="text-sm text-amber-800">Waiting for review.</p>}
@@ -100,7 +101,7 @@ export default async function Manage({ params, searchParams }: { params: Promise
               <input type="hidden" name="t" value={sp.t} />
               <input className="input" name="proof" type="file" accept="image/jpeg,image/png,image/webp" required />
               <textarea className="input" name="note" rows={2} maxLength={500} placeholder="Optional note for the reviewer (where/when this was taken)" />
-              <button className="btn w-full">Submit proof</button>
+              <SubmitButton className="w-full">Submit proof</SubmitButton>
               {l.status === "open" && <p className="text-xs text-stone-500">Submitting proof closes your listing to new sponsors.</p>}
             </form>
           )}

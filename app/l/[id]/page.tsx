@@ -27,14 +27,14 @@ export default async function ListingPage({ params, searchParams }: { params: Pr
         <div className="space-y-5">
           <div>
             <StatusBadge status={l.status} />
-            <h1 className="mt-2 text-3xl font-bold tracking-tight">{l.meta.title}</h1>
+            <h1 className="mt-2 text-3xl font-semibold">{l.meta.title}</h1>
             <div className="mt-1 text-sm text-stone-500">{l.meta.category} · listed by {l.meta.listerName}</div>
           </div>
           {l.meta.description && <p className="whitespace-pre-line text-stone-700">{l.meta.description}</p>}
           <div className="card grid grid-cols-3 gap-2 text-center">
-            <div><div className="text-xl font-bold">{fmt(l.meta.tilePrice)}</div><div className="text-xs text-stone-500">per tile</div></div>
-            <div><div className="text-xl font-bold">{l.sold}/{l.total}</div><div className="text-xs text-stone-500">sponsored</div></div>
-            <div><div className="text-xl font-bold">{l.total - l.sold}</div><div className="text-xs text-stone-500">available</div></div>
+            <div><div className="mt-1 text-2xl font-semibold tabular-nums">{fmt(l.meta.tilePrice)}</div><div className="text-xs text-stone-500">per tile</div></div>
+            <div><div className="mt-1 text-2xl font-semibold tabular-nums">{l.sold}/{l.total}</div><div className="text-xs text-stone-500">sponsored</div></div>
+            <div><div className="mt-1 text-2xl font-semibold tabular-nums">{l.total - l.sold}</div><div className="text-xs text-stone-500">available</div></div>
           </div>
           <div className="card text-sm text-stone-600">
             <div className="mb-1 font-semibold text-stone-900">How your sponsorship is verified</div>
@@ -46,7 +46,7 @@ export default async function ListingPage({ params, searchParams }: { params: Pr
               <div className="card">
                 <div className="mb-2 text-sm font-semibold">Verified proof photo</div>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={l.latestProof.proofUrl} alt="Proof" className="w-full rounded-lg" />
+                <img src={l.latestProof.proofUrl} alt="Proof" className="w-full rounded-2xl" />
               </div>
             )
           ) : null}
