@@ -3,6 +3,7 @@ import { getAllListings } from "@/lib/data";
 import { fmt, FEE_RATE } from "@/lib/money";
 import TileGrid from "@/components/TileGrid";
 import StatusBadge from "@/components/StatusBadge";
+import { CATEGORIES } from "@/lib/categories";
 
 export const dynamic = "force-dynamic";
 
@@ -13,8 +14,14 @@ const STEPS = [
   ["Get paid", `We check the photo, then release your earnings. We keep ${FEE_RATE * 100}%.`],
 ];
 
-export default async function Home() {
-  const listings = await getAllListings();
+export default async function Home({ searchParams }: { searchParams: Promise<{ cat?: string }> }) {
+  const { cat } = await searchParams;
+  const all = await getAllListings();
+  const listings = cat ? all.filter((l) => l.meta.category === cat) : all;
+  const counts = new Map<string, number>();
+  for (const l of all) counts.set(l.meta.category, (counts.get(l.meta.category) ?? 0) + 1);
+  const chip = (active: boolean) =>
+    `inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-sm ${active ? "border-indigo-600 bg-indigo-600 text-white" : "border-stone-300 bg-white text-stone-700 hover:border-stone-400"}`;
   return (
     <div className="space-y-16">
       <section className="grid items-center gap-10 md:grid-cols-2">
@@ -50,9 +57,17 @@ export default async function Home() {
 
       <section id="browse">
         <h2 className="text-2xl font-bold tracking-tight">Objects looking for sponsors</h2>
+        <div className="mt-4 flex flex-wrap gap-2">
+          <Link href="/#browse" scroll={false} className={chip(!cat)}>All <span className="opacity-70">{all.length}</span></Link>
+          {CATEGORIES.map((c) => (
+            <Link key={c.name} href={`/?cat=${encodeURIComponent(c.name)}#browse`} scroll={false} className={chip(cat === c.name)}>
+              <span>{c.emoji}</span>{c.name}{counts.get(c.name) ? <span className="opacity-70">{counts.get(c.name)}</span> : null}
+            </Link>
+          ))}
+        </div>
         {listings.length === 0 ? (
           <div className="card mt-4 text-center text-stone-600">
-            Nothing listed yet. <Link href="/list/new" className="font-semibold text-indigo-600">Be the first.</Link>
+            {cat ? "Nothing in this category yet." : "Nothing listed yet."} <Link href="/list/new" className="font-semibold text-indigo-600">Be the first.</Link>
           </div>
         ) : (
           <div className="mt-4 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">

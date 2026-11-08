@@ -7,6 +7,7 @@ import { claim, rand, save, sha256, uploadImage } from "@/lib/store";
 import { canBuy, canSubmitProof, checkToken, getListing, type ListingEvent, type ListingMeta, type Tile } from "@/lib/data";
 import { feeFor } from "@/lib/money";
 import { adminPassword, isAdmin } from "@/lib/admin";
+import { CATEGORY_NAMES } from "@/lib/categories";
 
 const str = (fd: FormData, k: string, max = 200) => String(fd.get(k) ?? "").trim().slice(0, max);
 const fail = (path: string, msg: string): never => {
@@ -23,7 +24,8 @@ export async function createListing(fd: FormData) {
   const back = "/list/new";
   const title = str(fd, "title", 120);
   const description = str(fd, "description", 1500);
-  const category = str(fd, "category", 40) || "Other";
+  const rawCat = str(fd, "category", 40);
+  const category = CATEGORY_NAMES.includes(rawCat) ? rawCat : "Other";
   const listerName = str(fd, "listerName", 80);
   const listerEmail = str(fd, "listerEmail", 120);
   const rows = Number(fd.get("rows"));
