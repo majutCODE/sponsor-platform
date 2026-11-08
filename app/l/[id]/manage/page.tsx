@@ -27,7 +27,7 @@ export default async function Manage({ params, searchParams }: { params: Promise
       {sp.new && (
         <Notice kind="info" title="Your listing is live">
           <div>Save this private link: it&apos;s how you manage it and get paid.</div>
-          <code className="mt-2 block break-all rounded-2xl border border-stone-200 bg-white px-2.5 py-1.5 text-xs">{manageUrl}</code>
+          <code className="mt-2 block break-all rounded-lg border border-stone-200 bg-white px-2.5 py-1.5 text-xs">{manageUrl}</code>
         </Notice>
       )}
       {sp.submitted && <Notice kind="success">Proof submitted. We&apos;ll review it shortly.</Notice>}
@@ -89,7 +89,7 @@ export default async function Manage({ params, searchParams }: { params: Promise
           {l.latestProof && l.status !== "proof_rejected" && (
             <>
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={l.latestProof.proofUrl} alt="Your proof" className="mb-3 w-full rounded-2xl" />
+              <img src={l.latestProof.proofUrl} alt="Your proof" className="mb-3 w-full rounded-lg" />
             </>
           )}
           {l.status === "in_review" && <p className="text-sm text-amber-800">Waiting for review.</p>}

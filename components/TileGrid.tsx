@@ -15,7 +15,7 @@ export default function TileGrid(props: {
 }) {
   const { id, imageUrl, rows, cols, tiles, price, buyable, highlight, compact } = props;
   return (
-    <div className="relative overflow-hidden rounded-[1.1rem] bg-stone-100">
+    <div className="relative overflow-hidden rounded-[calc(var(--radius-panel)-10px)] bg-stone-100">
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img src={imageUrl} alt="" className="block w-full" />
       <div

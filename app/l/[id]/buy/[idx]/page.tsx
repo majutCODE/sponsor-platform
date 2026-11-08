@@ -50,12 +50,12 @@ export default async function BuyPage({ params, searchParams }: { params: Promis
             <input className="input" id="logo" name="logo" type="file" accept="image/png,image/svg+xml,image/webp,image/jpeg" required />
             <p className="mt-1 text-xs text-stone-500">PNG or SVG with a transparent background works best. Under 4 MB.</p>
           </div>
-          <div className="rounded-2xl bg-stone-50 p-3 text-sm">
+          <div className="rounded-lg bg-stone-50 p-3 text-sm">
             <div className="flex justify-between"><span>Tile</span><span>{fmt(l.meta.tilePrice)}</span></div>
             <div className="flex justify-between text-stone-500"><span>Goes to lister after verification</span><span>{fmt(l.meta.tilePrice - feeFor(l.meta.tilePrice))}</span></div>
             <div className="flex justify-between text-stone-500"><span>Platform fee</span><span>{fmt(feeFor(l.meta.tilePrice))}</span></div>
           </div>
-          <div className="rounded-2xl border border-amber-200 bg-amber-50 p-3 text-xs text-amber-900">
+          <div className="rounded-lg border border-amber-200 bg-amber-50 p-3 text-xs text-amber-900">
             Test mode: no card is charged. Real payments switch on once Stripe is connected.
           </div>
           <label className="flex items-start gap-2 text-sm text-stone-600">

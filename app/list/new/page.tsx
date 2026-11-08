@@ -23,7 +23,7 @@ export default async function NewListing({ searchParams }: { searchParams: Promi
         <div className="grid gap-5 sm:grid-cols-2">
           <div>
             <label className="label" htmlFor="category">Category</label>
-            <select className="input" id="category" name="category">{CATEGORIES.map((c) => <option key={c.name} value={c.name}>{c.emoji} {c.name}</option>)}</select>
+            <select className="input" id="category" name="category">{CATEGORIES.map((c) => <option key={c.name} value={c.name}>{c.name}</option>)}</select>
           </div>
           <div>
             <label className="label" htmlFor="price">Price per tile (£)</label>

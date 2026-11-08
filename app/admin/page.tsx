@@ -56,7 +56,7 @@ export default async function Admin({ searchParams }: { searchParams: Promise<{ 
       {listings.map((l) => (
         <div key={l.meta.id} id={l.meta.id} className="card grid gap-5 md:grid-cols-[200px_1fr_260px]">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={l.meta.imageUrl} alt="" className="w-full rounded-2xl object-cover" />
+          <img src={l.meta.imageUrl} alt="" className="w-full rounded-lg object-cover" />
           <div className="space-y-2 text-sm">
             <div className="flex flex-wrap items-center gap-2">
               <Link href={`/l/${l.meta.id}`} className="text-base font-semibold hover:underline">{l.meta.title}</Link>
@@ -77,10 +77,10 @@ export default async function Admin({ searchParams }: { searchParams: Promise<{ 
             {l.latestProof ? (
               <a href={l.latestProof.proofUrl} target="_blank" rel="noopener noreferrer">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={l.latestProof.proofUrl} alt="Proof" className="w-full rounded-2xl ring-1 ring-stone-200" />
+                <img src={l.latestProof.proofUrl} alt="Proof" className="w-full rounded-lg ring-1 ring-stone-200" />
               </a>
             ) : (
-              <div className="rounded-2xl border border-dashed border-stone-300 p-4 text-center text-xs text-stone-500">No proof yet</div>
+              <div className="rounded-lg border border-dashed border-stone-300 p-4 text-center text-xs text-stone-500">No proof yet</div>
             )}
             {l.status === "in_review" && (
               <div className="space-y-2">

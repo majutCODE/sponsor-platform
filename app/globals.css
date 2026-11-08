@@ -9,7 +9,7 @@
   --color-stone-200: var(--border);
   --color-stone-300: var(--border-strong);
   --color-stone-400: var(--neutral-6);
-  --color-stone-500: var(--text-muted);
+  --color-stone-500: var(--text-secondary);
   --color-stone-600: var(--text-secondary);
   --color-stone-700: var(--neutral-9);
   --color-stone-800: var(--neutral-10);
@@ -22,7 +22,8 @@
   --color-indigo-900: var(--accent-strong);
 }
 
-:root { --font-geist: var(--font-geist-sans); --font-inter: var(--font-geist-sans); }
+/* Tighter panels read less "template"; inner radii derive from this (outer minus padding). */
+:root { --radius-panel: 1.25rem; --font-geist: var(--font-geist-sans); --font-inter: var(--font-geist-sans); }
 body { background: var(--background); color: var(--foreground); font-family: var(--font-sans); letter-spacing: -0.006em; }
 h1, h2, h3 { font-family: var(--font-display); letter-spacing: -0.025em; }
 
@@ -34,7 +35,8 @@ h1, h2, h3 { font-family: var(--font-display); letter-spacing: -0.025em; }
 .btn:hover { opacity: .9; box-shadow: var(--shadow-resting); }
 .btn-ghost { background: var(--surface); color: var(--foreground); border-color: var(--border); }
 .btn-ghost:hover { background: var(--surface-muted); }
-.btn-accent { background: var(--accent); color: var(--accent-foreground); }
+.btn-accent { background: var(--accent); color: var(--accent-foreground); box-shadow: 0 1px 0 rgb(255 255 255 / .18) inset, 0 6px 16px -6px var(--accent); }
+.btn-accent:hover { background: var(--accent-strong); opacity: 1; }
 
 .input {
   @apply mt-1.5 block w-full px-3.5 py-2.5 text-sm transition;
@@ -49,5 +51,4 @@ h1, h2, h3 { font-family: var(--font-display); letter-spacing: -0.025em; }
   @apply p-6; background: var(--surface-raised); border: 1px solid var(--border);
   border-radius: var(--radius-panel); box-shadow: var(--shadow-resting);
 }
-.eyebrow { @apply text-xs font-medium uppercase tracking-[0.12em]; color: var(--text-muted); }
 input[type="checkbox"] { accent-color: var(--foreground); width: 1rem; height: 1rem; }

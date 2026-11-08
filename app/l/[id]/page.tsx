@@ -46,7 +46,7 @@ export default async function ListingPage({ params, searchParams }: { params: Pr
               <div className="card">
                 <div className="mb-2 text-sm font-semibold">Verified proof photo</div>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={l.latestProof.proofUrl} alt="Proof" className="w-full rounded-2xl" />
+                <img src={l.latestProof.proofUrl} alt="Proof" className="w-full rounded-lg" />
               </div>
             )
           ) : null}
