@@ -1,18 +1,21 @@
 @import "tailwindcss";
 @import "../components/arc/foundation.css";
+@import "@fontsource/instrument-serif/latin-400.css";
+@import "@fontsource-variable/instrument-sans/wght.css";
 
 /* Map Tailwind's palette onto Arc tokens so every page shares one system. */
 @theme inline {
-  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Instrument Sans Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Instrument Serif", ui-serif, Georgia, serif;
   --color-stone-50: var(--surface-muted);
-  --color-stone-100: var(--neutral-3);
+  --color-stone-100: var(--surface-muted);
   --color-stone-200: var(--border);
   --color-stone-300: var(--border-strong);
-  --color-stone-400: var(--neutral-6);
+  --color-stone-400: var(--text-muted);
   --color-stone-500: var(--text-secondary);
   --color-stone-600: var(--text-secondary);
-  --color-stone-700: var(--neutral-9);
-  --color-stone-800: var(--neutral-10);
+  --color-stone-700: var(--ink-2);
+  --color-stone-800: var(--ink-2);
   --color-stone-900: var(--foreground);
   --color-indigo-50: var(--accent-subtle);
   --color-indigo-200: color-mix(in oklab, var(--accent) 30%, transparent);
@@ -41,34 +44,61 @@
   --color-destructive: var(--danger);
 }
 
-/* Tighter panels read less "template"; inner radii derive from this (outer minus padding). */
-:root { --radius-panel: 1.25rem; --font-geist: var(--font-geist-sans); --font-inter: var(--font-geist-sans); }
-body { background: var(--background); color: var(--foreground); font-family: var(--font-sans); letter-spacing: -0.006em; }
-h1, h2, h3 { font-family: var(--font-display); letter-spacing: -0.025em; }
+/* Editorial design language: warm paper, ink, one brick accent, hairline rules,
+   serif display type over a quiet grotesk. Overrides Arc's neutral defaults. */
+:root {
+  --background: #f6f3ec;
+  --surface: #fbf9f4;
+  --surface-raised: #fdfbf7;
+  --surface-muted: #eee9df;
+  --foreground: #161512;
+  --ink-2: #2e2b26;
+  --text-secondary: #57534b;
+  --text-muted: #77726a;
+  --border: #ddd6c8;
+  --border-subtle: #e8e2d6;
+  --border-strong: #b9b09f;
+  --accent: #8b2c1c;
+  --accent-strong: #6f2215;
+  --accent-subtle: rgb(139 44 28 / .09);
+  --accent-foreground: #fbf9f4;
+  --control-on: #161512;
+  --radius-panel: 6px;
+  --radius-control: 4px;
+  --radius-surface: 8px;
+  --font-geist: "Instrument Sans Variable";
+  --font-inter: "Instrument Sans Variable";
+  --font-display: "Instrument Serif", Georgia, serif;
+}
+body { background: var(--background); color: var(--foreground); font-family: var(--font-sans); font-size: 15.5px; }
+h1, h2, .display { font-family: var(--font-serif); font-weight: 400 !important; letter-spacing: -0.015em; line-height: 1.02; }
+h3 { letter-spacing: -0.01em; }
+::selection { background: var(--accent); color: var(--accent-foreground); }
 
 .btn, .btn-ghost {
   @apply inline-flex items-center justify-center gap-2 whitespace-nowrap px-4 text-sm font-medium transition active:scale-[0.97] disabled:opacity-50;
-  min-height: var(--control-height-md, 2.5rem); border-radius: var(--radius-pill); border: 1px solid transparent;
+  min-height: var(--control-height-md, 2.5rem); border-radius: var(--radius-control); border: 1px solid transparent; letter-spacing: .01em;
 }
 .btn { background: var(--foreground); color: var(--background); }
-.btn:hover { opacity: .9; box-shadow: var(--shadow-resting); }
+.btn:hover { background: var(--ink-2); }
 .btn-ghost { background: var(--surface); color: var(--foreground); border-color: var(--border); }
 .btn-ghost:hover { background: var(--surface-muted); }
-.btn-accent { background: var(--accent); color: var(--accent-foreground); box-shadow: 0 1px 0 rgb(255 255 255 / .18) inset, 0 6px 16px -6px var(--accent); }
+.btn-accent { background: var(--accent); color: var(--accent-foreground); }
 .btn-accent:hover { background: var(--accent-strong); opacity: 1; }
 
 .input {
   @apply mt-1.5 block w-full px-3.5 py-2.5 text-sm transition;
-  background: var(--surface); border: 1px solid var(--border); border-radius: calc(var(--radius-control) * .7);
+  background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-control);
 }
 .input:hover { border-color: var(--border-strong); }
 .input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-subtle); }
 .input[type="file"] { @apply py-2; }
-.input[type="file"]::file-selector-button { @apply mr-3 rounded-full border-0 px-3 py-1 text-xs font-medium; background: var(--surface-muted); color: var(--foreground); }
+.input[type="file"]::file-selector-button { @apply mr-3 rounded-sm border-0 px-3 py-1 text-xs font-medium; background: var(--surface-muted); color: var(--foreground); }
 .label { @apply block text-sm font-medium; color: var(--foreground); }
 .card {
   @apply p-6; background: var(--surface-raised); border: 1px solid var(--border);
-  border-radius: var(--radius-panel); box-shadow: var(--shadow-resting);
+  border-radius: var(--radius-panel);
 }
+.rule { border-top: 1px solid var(--foreground); }
 input[type="checkbox"] { accent-color: var(--foreground); width: 1rem; height: 1rem; }
 @layer base { *, ::before, ::after { border-color: var(--color-border); } }

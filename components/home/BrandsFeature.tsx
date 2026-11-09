@@ -16,7 +16,7 @@ export default function BrandsFeature() {
     <section className="w-full">
       <div className="grid items-center gap-12 lg:grid-cols-2">
         <div className="space-y-6">
-          <h2 className="text-3xl font-semibold leading-tight text-balance">
+          <h2 className="text-5xl text-balance">
             For brands: real placements, paid only on proof
           </h2>
           <p className="text-muted-foreground max-w-lg">
@@ -26,24 +26,24 @@ export default function BrandsFeature() {
           <ul className="space-y-2.5">
             {POINTS.map((item) => (
               <li key={item} className="flex items-center gap-2.5">
-                <span className="bg-primary/10 text-primary flex h-6 w-6 shrink-0 items-center justify-center rounded-full">
+                <span className="text-primary flex h-6 w-6 shrink-0 items-center justify-center">
                   <Check className="h-3.5 w-3.5" strokeWidth={2.5} aria-hidden />
                 </span>
                 <span className="text-sm text-stone-700">{item}</span>
               </li>
             ))}
           </ul>
-          <Button asChild size="lg" className="rounded-full px-6">
+          <Button asChild size="lg" className="h-12 rounded-[var(--radius-control)] px-6">
             <Link href="#browse">Browse objects</Link>
           </Button>
         </div>
 
-        <div className="bg-muted relative flex justify-center rounded-[var(--radius-panel)] p-8 shadow-[inset_0_0_4px_0_rgba(0,0,0,0.08)]">
+        <div className="bg-muted relative flex justify-center rounded-[var(--radius-panel)] p-8">
           <div className="relative h-[360px] w-full max-w-md">
-            <Card className="absolute top-0 left-0 w-[250px] gap-0 rounded-xl p-0 shadow-md">
+            <Card className="absolute top-0 left-0 w-[250px] gap-0 rounded-[var(--radius-panel)] p-0 shadow-sm">
               <CardContent className="space-y-2 p-4">
                 <div className="text-muted-foreground text-xs">Tile #5 · Vintage Vespa</div>
-                <div className="text-2xl font-semibold tabular-nums">£40.00</div>
+                <div className="display text-4xl tabular-nums">£40.00</div>
                 <div className="flex gap-2 text-[11px]">
                   <span className="rounded-md bg-amber-100 px-2 py-0.5 text-amber-800">Held</span>
                   <span className="rounded-md bg-stone-100 px-2 py-0.5 text-stone-700">Awaiting proof</span>
@@ -51,7 +51,7 @@ export default function BrandsFeature() {
               </CardContent>
             </Card>
 
-            <Card className="absolute top-28 right-0 z-10 w-[240px] gap-0 rounded-xl p-0 shadow-lg">
+            <Card className="absolute top-28 right-0 z-10 w-[240px] gap-0 rounded-[var(--radius-panel)] p-0 shadow-md">
               <CardContent className="space-y-3 p-4">
                 <div className="text-muted-foreground text-xs">Proof photo</div>
                 <div className="grid aspect-[4/3] grid-cols-3 gap-1 rounded-lg bg-gradient-to-br from-[#c9a27a] to-[#6b4f3a] p-1.5">
@@ -65,7 +65,7 @@ export default function BrandsFeature() {
               </CardContent>
             </Card>
 
-            <Card className="absolute bottom-4 left-8 w-[250px] gap-0 rounded-xl p-0 shadow-lg">
+            <Card className="absolute bottom-4 left-8 w-[250px] gap-0 rounded-[var(--radius-panel)] p-0 shadow-md">
               <CardContent className="space-y-2 p-4">
                 <div className="flex items-center justify-between text-sm">
                   <span className="font-medium">Payout released</span>

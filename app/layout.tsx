@@ -1,57 +1,78 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { GeistSans } from "geist/font/sans";
 import "./globals.css";
-import { Footer3 } from "@/components/ui/footer-3";
 
 export const metadata: Metadata = {
   title: "TileSponsor",
   description: "Brands sponsor the things people own, one tile at a time.",
 };
 
-function Logo() {
+function Wordmark({ className = "" }: { className?: string }) {
   return (
-    <span className="grid h-7 w-7 grid-cols-2 gap-[3px] rounded-[9px] bg-stone-900 p-[5px]">
-      <span className="rounded-[3px] bg-indigo-500" />
-      <span className="rounded-[3px] bg-white/35" />
-      <span className="rounded-[3px] bg-white/35" />
-      <span className="rounded-[3px] bg-white" />
+    <span className={`flex items-center gap-2 ${className}`}>
+      <span className="grid h-[18px] w-[18px] grid-cols-2 gap-[2px]" aria-hidden>
+        <span className="bg-stone-900" />
+        <span className="bg-indigo-600" />
+        <span className="border border-stone-900" />
+        <span className="bg-stone-900" />
+      </span>
+      <span className="font-serif text-[26px] leading-none tracking-tight">TileSponsor</span>
     </span>
   );
 }
 
+const NAV = [
+  { href: "/#browse", label: "Browse" },
+  { href: "/#how", label: "How it works" },
+  { href: "/#faq", label: "FAQ" },
+];
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" data-accent="violet" className={GeistSans.variable}>
+    <html lang="en">
       <body className="min-h-screen antialiased">
-        <header className="sticky top-0 z-30 border-b border-stone-200/70 bg-white/75 backdrop-blur-xl">
+        <header className="sticky top-0 z-30 border-b border-stone-900 bg-[var(--background)]/90 backdrop-blur">
           <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-5">
-            <Link href="/" className="flex items-center gap-2.5 text-[15px] font-semibold tracking-tight">
-              <Logo />
-              TileSponsor
-            </Link>
-            <nav className="flex items-center gap-1 text-sm">
-              <Link href="/#browse" className="hidden rounded-full px-3 py-2 text-stone-600 transition hover:bg-stone-50 hover:text-stone-900 sm:inline">Browse</Link>
-              <Link href="/#how" className="hidden rounded-full px-3 py-2 text-stone-600 transition hover:bg-stone-50 hover:text-stone-900 sm:inline">How it works</Link>
-              <Link href="/admin" className="rounded-full px-3 py-2 text-stone-600 transition hover:bg-stone-50 hover:text-stone-900">Admin</Link>
-              <Link href="/list/new" className="btn ml-2 !min-h-9">List an object</Link>
+            <Link href="/"><Wordmark /></Link>
+            <nav className="flex items-center gap-6 text-sm">
+              {NAV.map((n) => (
+                <Link key={n.href} href={n.href} className="hidden text-stone-600 transition hover:text-stone-900 sm:inline">{n.label}</Link>
+              ))}
+              <Link href="/list/new" className="btn !min-h-9">List an object</Link>
             </nav>
           </div>
         </header>
-        <main className="mx-auto max-w-6xl px-5 py-10">{children}</main>
-        <div className="mx-auto max-w-6xl [&>footer]:px-5">
-        <Footer3
-          logo={<Logo />}
-          brandName="TileSponsor"
-          description="Brands sponsor the things people own, one tile at a time. Paid out only on photo proof."
-          linkGroups={[
-            { title: "Listers", links: [{ label: "List an object", href: "/list/new" }, { label: "How it works", href: "/#how" }] },
-            { title: "Brands", links: [{ label: "Browse objects", href: "/#browse" }, { label: "FAQ", href: "/#faq" }] },
-            { title: "Team", links: [{ label: "Admin", href: "/admin" }] },
-          ]}
-          copyright="© 2026 TileSponsor. Test mode: payments are simulated."
-        />
-        </div>
+        <main className="mx-auto max-w-6xl px-5 py-12">{children}</main>
+        <footer className="mt-12 border-t border-stone-900">
+          <div className="mx-auto grid max-w-6xl gap-10 px-5 py-14 md:grid-cols-[2fr_1fr_1fr_1fr]">
+            <div>
+              <Wordmark />
+              <p className="mt-4 max-w-xs text-sm leading-relaxed text-stone-600">
+                Brands sponsor the things people own, one tile at a time. Paid out only on photo proof.
+              </p>
+            </div>
+            {[
+              ["Listers", [["List an object", "/list/new"], ["How it works", "/#how"]]],
+              ["Brands", [["Browse objects", "/#browse"], ["FAQ", "/#faq"]]],
+              ["Team", [["Admin", "/admin"]]],
+            ].map(([title, links]) => (
+              <div key={title as string}>
+                <div className="text-sm font-semibold">{title as string}</div>
+                <ul className="mt-3 space-y-2 text-sm">
+                  {(links as string[][]).map(([l, h]) => (
+                    <li key={h}><Link href={h} className="text-stone-600 hover:text-stone-900">{l}</Link></li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+          <div className="border-t border-stone-200">
+            <div className="mx-auto flex max-w-6xl flex-col justify-between gap-2 px-5 py-5 text-xs text-stone-500 sm:flex-row">
+              <span>© 2026 TileSponsor</span>
+              <span>Test mode: payments are simulated. No real money moves.</span>
+            </div>
+          </div>
+        </footer>
       </body>
     </html>
   );

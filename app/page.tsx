@@ -4,17 +4,15 @@ import { fmt, FEE_RATE } from "@/lib/money";
 import TileGrid from "@/components/TileGrid";
 import StatusBadge from "@/components/StatusBadge";
 import HeroCar from "@/components/hero/HeroCar";
-import CategoryIcon from "@/components/CategoryIcon";
 import Progress from "@/components/arc/progress/progress";
 import EmptyState from "@/components/arc/empty-state/empty-state";
 import { CATEGORIES } from "@/lib/categories";
 import BrandsFeature from "@/components/home/BrandsFeature";
 import { Faq5 } from "@/components/ui/faq-5";
-import { Cta1 } from "@/components/ui/cta-1";
 
 const FAQ = [
   {
-    title: "Questions",
+    title: "Questions, answered",
     description: "How payments, proof and payouts work.",
     items: [
       { question: "When does the lister get paid?", answer: `Once every sponsor's logo is on the object and we approve the proof photo. We release the tile price minus our ${FEE_RATE * 100}% fee.` },
@@ -41,40 +39,51 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ c
   const counts = new Map<string, number>();
   for (const l of all) counts.set(l.meta.category, (counts.get(l.meta.category) ?? 0) + 1);
   const chip = (active: boolean) =>
-    `inline-flex items-center gap-1.5 rounded-full border px-3.5 py-1.5 text-sm transition ${active ? "border-stone-900 bg-stone-900 text-white" : "border-stone-200 bg-white text-stone-600 hover:border-stone-300 hover:text-stone-900"}`;
+    `inline-flex items-center gap-1.5 border-b py-1 text-sm transition ${active ? "border-stone-900 text-stone-900" : "border-transparent text-stone-600 hover:text-stone-900"}`;
   return (
-    <div className="space-y-24">
-      <section className="grid grid-cols-[minmax(0,1fr)] items-center gap-10 pt-4 md:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] md:gap-12 md:pt-10">
-        <div>
-          <h1 className="text-4xl font-semibold leading-[1.05] text-balance sm:text-[3.5rem]">
+    <div className="space-y-28">
+      <section className="pt-2 md:pt-6">
+        <div className="grid gap-8 md:grid-cols-12 md:items-end">
+          <h1 className="text-[3.4rem] text-balance sm:text-7xl md:col-span-8 lg:text-[6.2rem]">
             Brands pay to put their logo on your car.
           </h1>
-          <p className="mt-5 max-w-md text-lg leading-relaxed text-pretty text-stone-700">
-            Or your guitar, prom dress or anything else you own. We split it into tiles, brands buy them, and you get
-            paid once a photo shows the logos are on.
-          </p>
-          <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3">
-            <Link href="/list/new" className="btn btn-accent !min-h-12 !px-6 text-[15px]">List your first object</Link>
-            <Link href="#browse" className="text-sm font-medium text-stone-700 underline-offset-4 hover:text-stone-900 hover:underline">
-              Or sponsor something
-            </Link>
+          <div className="md:col-span-4 md:pb-3">
+            <p className="text-lg leading-relaxed text-pretty text-stone-700">
+              Or your guitar, prom dress or anything else you own. We split it into tiles, brands buy them, and you get
+              paid once a photo shows the logos are on.
+            </p>
+            <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-3">
+              <Link href="/list/new" className="btn btn-accent !min-h-12 !px-6 text-[15px]">List your first object</Link>
+              <Link href="#browse" className="text-sm font-medium text-stone-900 underline decoration-stone-300 underline-offset-4 hover:decoration-stone-900">
+                Sponsor something
+              </Link>
+            </div>
           </div>
-          <dl className="mt-10 grid max-w-sm grid-cols-3 gap-6 border-t border-stone-200 pt-6 text-sm">
-            <div><dt className="text-stone-600">You keep</dt><dd className="mt-1 text-xl font-semibold tabular-nums">{100 - FEE_RATE * 100}%</dd></div>
-            <div><dt className="text-stone-600">Tiles</dt><dd className="mt-1 text-xl font-semibold tabular-nums">Up to 64</dd></div>
-            <div><dt className="text-stone-600">Paid</dt><dd className="mt-1 text-xl font-semibold">On proof</dd></div>
-          </dl>
         </div>
-        <HeroCar />
+        <div className="mt-12">
+          <HeroCar />
+        </div>
+        <dl className="mt-8 grid grid-cols-3 border-t border-stone-900 text-sm">
+          {[
+            ["You keep", `${100 - FEE_RATE * 100}%`],
+            ["Tiles per object", "Up to 64"],
+            ["Paid out", "On proof"],
+          ].map(([k, v], i) => (
+            <div key={k} className={`pt-4 ${i ? "border-l border-stone-200 pl-5" : ""}`}>
+              <dt className="text-stone-600">{k}</dt>
+              <dd className="display mt-1 text-3xl tabular-nums sm:text-4xl">{v}</dd>
+            </div>
+          ))}
+        </dl>
       </section>
 
       <section id="how" className="scroll-mt-24">
-        <h2 className="text-3xl font-semibold text-balance">From listing to payout in four steps</h2>
-        <ol className="mt-8 grid gap-x-8 gap-y-8 sm:grid-cols-2 lg:grid-cols-4">
+        <h2 className="max-w-2xl text-5xl text-balance">From listing to payout in four steps</h2>
+        <ol className="mt-10 grid gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">
           {STEPS.map(([t, d], i) => (
             <li key={t} className="border-t border-stone-900 pt-4">
-              <div className="text-sm font-medium tabular-nums text-stone-600">Step {i + 1}</div>
-              <div className="mt-1 font-semibold">{t}</div>
+              <div className="display text-5xl tabular-nums text-indigo-600">{i + 1}</div>
+              <div className="mt-3 font-semibold">{t}</div>
               <p className="mt-1.5 text-sm leading-relaxed text-stone-700">{d}</p>
             </li>
           ))}
@@ -84,12 +93,12 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ c
       <BrandsFeature />
 
       <section id="browse" className="scroll-mt-24">
-        <h2 className="text-3xl font-semibold text-balance">Objects looking for sponsors</h2>
-        <div className="mt-6 flex flex-wrap gap-2">
+        <h2 className="text-5xl text-balance">Objects looking for sponsors</h2>
+        <div className="mt-8 flex flex-wrap gap-x-6 gap-y-2 border-b border-stone-200 pb-px">
           <Link href="/#browse" scroll={false} className={chip(!cat)}>All <span className="tabular-nums opacity-60">{all.length}</span></Link>
           {CATEGORIES.map((c) => (
             <Link key={c.name} href={`/?cat=${encodeURIComponent(c.name)}#browse`} scroll={false} className={chip(cat === c.name)}>
-              <CategoryIcon name={c.name} />{c.name}{counts.get(c.name) ? <span className="tabular-nums opacity-60">{counts.get(c.name)}</span> : null}
+              {c.name}{counts.get(c.name) ? <span className="tabular-nums opacity-60">{counts.get(c.name)}</span> : null}
             </Link>
           ))}
         </div>
@@ -102,20 +111,20 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ c
             />
           </div>
         ) : (
-          <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-8 grid gap-x-6 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
             {listings.map((l) => (
-              <Link key={l.meta.id} href={`/l/${l.meta.id}`} className="card group block !p-2.5 transition hover:border-stone-300 hover:shadow-lg">
-                <div className="overflow-hidden rounded-[calc(var(--radius-panel)-10px)]">
+              <Link key={l.meta.id} href={`/l/${l.meta.id}`} className="group block">
+                <div className="overflow-hidden rounded-[var(--radius-panel)] transition group-hover:opacity-90">
                   <TileGrid id={l.meta.id} imageUrl={l.meta.imageUrl} rows={l.meta.rows} cols={l.meta.cols} tiles={l.tiles} price={l.meta.tilePrice} compact />
                 </div>
-                <div className="flex items-start justify-between gap-2 px-2.5 pt-4">
+                <div className="flex items-start justify-between gap-2 pt-4">
                   <div>
-                    <div className="font-semibold">{l.meta.title}</div>
+                    <div className="display text-2xl">{l.meta.title}</div>
                     <div className="mt-0.5 text-sm text-stone-600"><span className="tabular-nums">{fmt(l.meta.tilePrice)}</span> a tile · {l.meta.category}</div>
                   </div>
                   <StatusBadge status={l.status} />
                 </div>
-                <div className="px-2.5 pb-2.5 pt-4">
+                <div className="pt-4">
                   <Progress value={l.sold} max={l.total} label={`${l.sold} of ${l.total} tiles sponsored`} />
                 </div>
               </Link>
@@ -127,14 +136,14 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ c
         <Faq5 categories={FAQ} />
       </div>
 
-      <div className="flex justify-center [&>section]:max-w-none [&>section]:py-0 [&_.container]:px-0">
-        <Cta1
-          title="Got something people see?"
-          description="List it in two minutes. Brands do the rest."
-          buttonText="List your first object"
-          buttonLink="/list/new"
-        />
-      </div>
+      <section className="-mx-5 bg-stone-900 px-5 py-16 text-[var(--background)] sm:mx-0 sm:px-12 sm:py-20" style={{ borderRadius: "var(--radius-panel)" }}>
+        <div className="grid gap-8 md:grid-cols-12 md:items-end">
+          <h2 className="text-5xl text-balance sm:text-6xl md:col-span-8">Got something people see? List it in two minutes.</h2>
+          <div className="md:col-span-4 md:text-right">
+            <Link href="/list/new" className="btn btn-accent !min-h-12 !px-6 text-[15px]">List your first object</Link>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }

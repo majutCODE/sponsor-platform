@@ -38,7 +38,7 @@ export function Faq5({ categories, className }: Faq5Props) {
             className="grid grid-cols-1 items-start gap-8 md:gap-12 lg:grid-cols-12 lg:gap-16"
           >
             <div className="flex flex-col gap-4 lg:sticky lg:top-8 lg:col-span-4">
-              <h2 className="text-3xl font-bold tracking-tight md:text-4xl">
+              <h2 className="text-5xl text-balance">
                 {category.title}
               </h2>
               {category.description && (
@@ -56,7 +56,7 @@ export function Faq5({ categories, className }: Faq5Props) {
                     value={`item-${idx}-${itemIdx}`}
                     className="border-border/80 border-b"
                   >
-                    <AccordionTrigger className="hover:text-primary py-5 text-left text-lg font-medium transition-colors hover:no-underline md:text-xl">
+                    <AccordionTrigger className="hover:text-primary py-5 text-left text-lg font-medium transition-colors hover:no-underline">
                       {item.question}
                     </AccordionTrigger>
                     <AccordionContent className="text-muted-foreground pb-6 text-base leading-relaxed md:text-lg lg:pr-12">
