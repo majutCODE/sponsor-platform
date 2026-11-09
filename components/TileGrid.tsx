@@ -10,16 +10,17 @@ export default function TileGrid(props: {
   rows: number;
   cols: number;
   tiles: Record<number, Tile>;
-  price: number;
+  /** Lowest bid accepted next on each spot, in pence. */
+  ask?: Record<number, number>;
   buyable?: boolean;
   highlight?: number;
   compact?: boolean;
   /** Set design key. When present the tiles are drawn on the object instead of over the photo. */
   template?: string;
 }) {
-  const { id, imageUrl, rows, cols, tiles, price, buyable, highlight, compact } = props;
+  const { id, imageUrl, rows, cols, tiles, ask = {}, buyable, highlight, compact } = props;
   const template = getTemplate(props.template);
-  if (template) return <ObjectTiles id={id} template={template} tiles={tiles} price={price} buyable={buyable} highlight={highlight} compact={compact} />;
+  if (template) return <ObjectTiles id={id} template={template} tiles={tiles} ask={ask} buyable={buyable} highlight={highlight} compact={compact} />;
   return (
     <div className="relative overflow-hidden rounded-[calc(var(--radius-panel)-10px)] bg-stone-100">
       {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -37,6 +38,7 @@ export default function TileGrid(props: {
               <img src={t.logoUrl} alt={t.brandName} title={t.brandName} className="max-h-full max-w-full object-contain" />
             );
             const cls = `flex items-center justify-center border border-white/50 bg-white/85 ${compact ? "p-0.5" : "p-1.5"}${hl}`;
+            if (buyable) return <Link key={i} href={`/l/${id}/buy/${i}`} className={cls}>{inner}</Link>;
             return t.website && !compact ? (
               <a key={i} href={t.website} target="_blank" rel="noopener noreferrer sponsored" className={cls}>{inner}</a>
             ) : (
@@ -51,7 +53,7 @@ export default function TileGrid(props: {
                 className={`group flex items-center justify-center border border-dashed border-white/80 transition hover:bg-indigo-600/50 ${hl}`}
               >
                 <span className="rounded bg-black/55 px-1.5 py-0.5 text-[11px] font-semibold text-white opacity-70 group-hover:opacity-100">
-                  {fmt(price)}
+                  {fmt(ask[i] ?? 0).replace(/\.00$/, "")}
                 </span>
               </Link>
             );

@@ -4,7 +4,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "TileSponsor",
-  description: "Brands sponsor the things people own, one tile at a time.",
+  description: "Brands bid for sticker spots on the things verified creators own.",
 };
 
 function Wordmark({ className = "" }: { className?: string }) {
@@ -38,7 +38,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               {NAV.map((n) => (
                 <Link key={n.href} href={n.href} className="hidden font-semibold text-stone-900 transition hover:text-[var(--accent)] sm:inline">{n.label}</Link>
               ))}
-              <Link href="/list/new" className="btn !min-h-9">List an object</Link>
+              <Link href="/creators/apply" className="btn !min-h-9">Apply as a creator</Link>
             </nav>
           </div>
         </header>
@@ -48,11 +48,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <div>
               <Wordmark />
               <p className="mt-4 max-w-xs text-sm leading-relaxed text-stone-600">
-                Brands sponsor the things people own, one tile at a time. Paid out only on photo proof.
+                Brands bid for sticker spots on the things verified creators own. Paid out only on photo proof.
               </p>
             </div>
             {[
-              ["Listers", [["List an object", "/list/new"], ["How it works", "/#how"]]],
+              ["Creators", [["Apply as a creator", "/creators/apply"], ["How it works", "/#how"]]],
               ["Brands", [["Browse objects", "/#browse"], ["FAQ", "/#faq"]]],
               ["Team", [["Admin", "/admin"]]],
             ].map(([title, links]) => (

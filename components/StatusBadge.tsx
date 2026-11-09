@@ -3,12 +3,16 @@ import Badge, { type BadgeTone } from "@/components/arc/badge/badge";
 import Alert from "@/components/arc/alert/alert";
 
 const TONES: Record<Status, BadgeTone> = {
-  open: "success",
-  sold_out: "info",
+  upcoming: "info",
+  live: "success",
+  confirming: "warning",
+  unsold: "neutral",
+  stickers_due: "info",
   in_review: "warning",
   proof_rejected: "danger",
-  approved: "info",
-  paid_out: "neutral",
+  running: "success",
+  proof_overdue: "danger",
+  complete: "neutral",
 };
 
 export default function StatusBadge({ status }: { status: Status }) {

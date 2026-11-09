@@ -19,10 +19,10 @@ const DRESS_SPONSORS: Record<number, [string, string, string?]> = {
 };
 
 const POINTS = [
-  "Pick the exact tile your logo goes on",
-  "Pay once, held until the lister uploads proof",
-  "Refunded if the logo never makes it on",
-  "Link from your tile straight to your site",
+  "Bid on the exact spot your sticker goes on",
+  "We print and post the sticker, included in your bid",
+  "Fresh proof photos for the whole deal",
+  "Pay nothing if the creator says no",
 ];
 
 export default function BrandsFeature() {
@@ -34,8 +34,8 @@ export default function BrandsFeature() {
             For brands: real placements, paid only on proof
           </h2>
           <p className="text-muted-foreground max-w-lg">
-            Sponsor a prom dress, a rally car or a busker&apos;s guitar for less than a boosted post. You see the photo
-            before the lister sees a penny.
+            Put a real sticker on a verified creator&apos;s rally car, kit or guitar. You name your price at auction, and
+            you see the photo before the creator sees a penny.
           </p>
           <ul className="space-y-2.5">
             {POINTS.map((item) => (
@@ -56,7 +56,7 @@ export default function BrandsFeature() {
           <div className="relative h-[360px] w-full max-w-md">
             <Card className="absolute top-0 left-0 w-[250px] gap-0 sticker rounded-2xl p-0 -rotate-2">
               <CardContent className="space-y-2 p-4">
-                <div className="text-muted-foreground text-xs">Tile #5 · White wedding dress</div>
+                <div className="text-muted-foreground text-xs">Spot #5 · White wedding dress</div>
                 <div className="display text-4xl tabular-nums">£40.00</div>
                 <div className="flex gap-2 text-[11px]">
                   <span className="rounded-md bg-amber-100 px-2 py-0.5 text-amber-800">Held</span>
@@ -95,7 +95,7 @@ export default function BrandsFeature() {
                   <span className="text-muted-foreground text-xs tabular-nums">2 min ago</span>
                 </div>
                 <div className="text-muted-foreground text-sm">
-                  <span className="text-foreground font-medium tabular-nums">£34.00</span> to the lister
+                  <span className="text-foreground font-medium tabular-nums">£34.00</span> to the creator
                 </div>
                 <div className="flex gap-2 text-[11px]">
                   <span className="rounded-md bg-emerald-100 px-2 py-0.5 text-emerald-800">Paid</span>

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { getAllListings } from "@/lib/data";
+import { getAllListings, TERMS } from "@/lib/data";
 import { fmt, FEE_RATE } from "@/lib/money";
 import TileGrid from "@/components/TileGrid";
 import StatusBadge from "@/components/StatusBadge";
@@ -15,10 +15,14 @@ const FAQ = [
     title: "Questions, answered",
     description: "How payments, proof and payouts work.",
     items: [
-      { question: "When does the lister get paid?", answer: `Once every sponsor's logo is on the object and we approve the proof photo. We release the tile price minus our ${FEE_RATE * 100}% fee.` },
-      { question: "What if the logo never goes on?", answer: "Your payment is held by us, not the lister. If no valid proof arrives, you get refunded." },
-      { question: "What can I list?", answer: "Anything you own and use in public: cars, bikes, guitars, prom dresses, sports kit, laptops and more." },
-      { question: "How big is a tile?", answer: "You choose the grid, up to 8 by 8. Each cell on your photo is one logo spot." },
+      { question: "Who can list?", answer: "Verified creators only. Apply once and we review every application by hand. UK only for now." },
+      { question: "How do brands buy a spot?", answer: "By auction. Every listing has a launch date and a timer. Bid on any spot while the timer runs. The highest bid on each spot at zero wins, and the creator confirms each winning brand." },
+      { question: "What sizes are there?", answer: "Two. Hero spots are the big, prime positions. Medium spots are everything else. Each has its own opening bid, from £50." },
+      { question: "Who makes the sticker?", answer: "We do. We print it from your logo and post it to the creator. It is included in your bid." },
+      { question: "How long does it stay on?", answer: "The creator picks the deal: a one-off event, or 1, 3 or 6 months. The clock starts when the first proof photo is verified." },
+      { question: "How do I know it stays on?", answer: "The creator sends a fresh proof photo on a schedule: weekly for 1 month deals, every 2 weeks for 3 months, monthly for 6 months. We check each one. Missed proofs earn strikes, and three strikes removes a creator." },
+      { question: "When does the creator get paid?", answer: `Once the stickers are on and we verify the first proof photo. We keep ${FEE_RATE * 100}%, which also covers printing and postage.` },
+      { question: "Do I get social posts too?", answer: "No. You are buying the sticker on the real object, seen wherever that creator takes it." },
     ],
   },
 ];
@@ -26,10 +30,10 @@ const FAQ = [
 export const dynamic = "force-dynamic";
 
 const STEPS = [
-  ["List your object", "Upload a photo of your prom dress, car, guitar or anything else. Pick a grid and a price per tile."],
-  ["Brands buy tiles", "Each tile is a logo spot. Multiple brands can sponsor the same object."],
-  ["Show the proof", "Put the logos on the real thing and upload a photo of it."],
-  ["Get paid", `We check the photo, then release your earnings. We keep ${FEE_RATE * 100}%.`],
+  ["Creators list", "Verified creators list a car, kit, guitar or dress, then set a launch date and a timer."],
+  ["Brands bid", "Every sticker spot is an auction. The highest bid on each spot when the timer ends wins."],
+  ["We send stickers", "The creator confirms the brands. We print the stickers and post them out."],
+  ["Proof, then pay", `The creator sends proof photos on a schedule. We pay them once the stickers are verified and keep ${FEE_RATE * 100}%.`],
 ];
 
 export default async function Home({ searchParams }: { searchParams: Promise<{ cat?: string }> }) {
@@ -45,20 +49,20 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ c
       <section className="grid grid-cols-[minmax(0,1fr)] items-center gap-12 pt-2 md:grid-cols-[minmax(0,5fr)_minmax(0,6fr)] md:pt-8">
         <div>
           <h1 className="text-[3.1rem] text-balance sm:text-7xl lg:text-[4.7rem]">
-            Brands pay to put their logo on <span className="hl">your car.</span>
+            Brands bid to put their sticker on <span className="hl">your car.</span>
           </h1>
           <p className="mt-6 max-w-md text-lg leading-relaxed text-pretty text-stone-700">
-            Or your guitar, prom dress or anything else you own. Brands buy a spot like a sticker, and you get paid once
-            a photo shows it&apos;s on.
+            Or your guitar, kit or wedding dress. Verified creators list an object, brands bid on sticker spots, and we
+            print and post the stickers. You get paid once a photo shows they are on.
           </p>
           <div className="mt-8 flex flex-wrap items-center gap-4">
-            <Link href="/list/new" className="btn btn-accent !min-h-14 !px-7 text-base">List your first object</Link>
+            <Link href="/creators/apply" className="btn btn-accent !min-h-14 !px-7 text-base">Apply as a creator</Link>
             <Link href="#browse" className="btn-ghost !min-h-14 !px-7 text-base">Sponsor something</Link>
           </div>
           <dl className="mt-10 flex flex-wrap gap-3 text-sm">
             {[
               ["You keep", `${100 - FEE_RATE * 100}%`, "var(--s-yellow)", "-rotate-2"],
-              ["Tiles", "Up to 64", "var(--s-pink)", "rotate-1"],
+              ["Spots", "By auction", "var(--s-pink)", "rotate-1"],
               ["Paid", "On proof", "#fff", "-rotate-1"],
             ].map(([k, v, bg, r]) => (
               <div key={k} className={`sticker rounded-2xl px-4 py-2 ${r}`} style={{ background: bg }}>
@@ -72,7 +76,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ c
       </section>
 
       <section id="how" className="scroll-mt-24">
-        <h2 className="max-w-2xl text-5xl text-balance">From listing to payout in four steps</h2>
+        <h2 className="max-w-2xl text-5xl text-balance">From launch to payout in four steps</h2>
         <ol className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {STEPS.map(([t, d], i) => (
             <li key={t} className="card">
@@ -100,8 +104,8 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ c
           <div className="card mt-6">
             <EmptyState
               title={cat ? "Nothing in this category yet" : "Nothing listed yet"}
-              description="Be the first to list an object and let brands claim a tile."
-              action={<Link href="/list/new" className="btn">List an object</Link>}
+              description="Verified creators list here. Apply to be one of the first."
+              action={<Link href="/creators/apply" className="btn">Apply as a creator</Link>}
             />
           </div>
         ) : (
@@ -109,17 +113,17 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ c
             {listings.map((l) => (
               <Link key={l.meta.id} href={`/l/${l.meta.id}`} className="card group block !p-3 transition hover:-translate-y-1">
                 <div className="overflow-hidden rounded-[calc(var(--radius-panel)-12px)] border-2 border-stone-900">
-                  <TileGrid id={l.meta.id} imageUrl={l.meta.imageUrl} rows={l.meta.rows} cols={l.meta.cols} template={l.meta.template} tiles={l.tiles} price={l.meta.tilePrice} compact />
+                  <TileGrid id={l.meta.id} imageUrl={l.meta.imageUrl} rows={l.meta.rows} cols={l.meta.cols} template={l.meta.template} tiles={l.tiles} compact />
                 </div>
                 <div className="flex items-start justify-between gap-2 px-1 pt-4">
                   <div>
                     <div className="display text-xl">{l.meta.title}</div>
-                    <div className="mt-0.5 text-sm text-stone-600"><span className="tabular-nums">{fmt(l.meta.tilePrice)}</span> a tile · {categoryOf(l.meta.category)}</div>
+                    <div className="mt-0.5 text-sm text-stone-600">Bids from <span className="tabular-nums">{fmt(l.meta.startBid).replace(/\.00$/, "")}</span> · {TERMS[l.meta.term].label} · {l.meta.listerName}</div>
                   </div>
                   <StatusBadge status={l.status} />
                 </div>
                 <div className="px-1 pb-1 pt-4">
-                  <Progress value={l.sold} max={l.total} label={`${l.sold} of ${l.total} tiles sponsored`} />
+                  <Progress value={l.sold} max={l.total} label={`${l.sold} of ${l.total} spots ${l.confirmed ? "sponsored" : "with bids"}`} />
                 </div>
               </Link>
             ))}
@@ -132,9 +136,9 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ c
 
       <section className="sticker -mx-1 rounded-[28px] bg-[var(--s-blue)] px-6 py-14 text-white sm:px-12 sm:py-16" style={{ boxShadow: "8px 8px 0 var(--foreground)" }}>
         <div className="grid gap-8 md:grid-cols-12 md:items-end">
-          <h2 className="text-5xl text-balance sm:text-6xl md:col-span-8">Got something people see? List it in two minutes.</h2>
+          <h2 className="text-5xl text-balance sm:text-6xl md:col-span-8">Got an audience and something they see? Get it sponsored.</h2>
           <div className="md:col-span-4 md:text-right">
-            <Link href="/list/new" className="btn btn-accent !min-h-12 !px-6 text-[15px]">List your first object</Link>
+            <Link href="/creators/apply" className="btn btn-accent !min-h-12 !px-6 text-[15px]">Apply as a creator</Link>
           </div>
         </div>
       </section>
