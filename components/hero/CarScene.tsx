@@ -112,7 +112,7 @@ const SLOTS: Slot[] = [
 ];
 
 function SideTiles({ side, sponsors }: { side: 1 | -1; sponsors: (Sponsor | null)[] }) {
-  const textures = useMemo(() => SLOTS.map((slot, i) => logoTexture(sponsors[i] ?? null, "£40", slot.w / slot.h)), [sponsors]);
+  const textures = useMemo(() => SLOTS.map((slot, i) => logoTexture(sponsors[i] ?? null, "£50", slot.w / slot.h)), [sponsors]);
   return (
     <group position={[0, 0, side * (HALF + 0.006)]} rotation={[0, side === 1 ? 0 : Math.PI, 0]}>
       {SLOTS.map((slot, i) => (

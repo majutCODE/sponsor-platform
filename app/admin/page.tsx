@@ -1,14 +1,15 @@
 import SubmitButton from "@/components/SubmitButton";
 import Link from "next/link";
-import { adminAction, adminLogin, adminLogout } from "@/app/actions";
+import { adminAction, adminCreatorAction, adminLogin, adminLogout } from "@/app/actions";
 import { adminPassword, isAdmin } from "@/lib/admin";
-import { getAllListings, type Status } from "@/lib/data";
+import { CREATOR_STATUS_LABEL, fmtFollowers, getAllCreators, getAllListings, payoutOwed, TERMS, tierOf, type Status } from "@/lib/data";
+import { fmtDateTime } from "@/lib/time";
 import { fmt } from "@/lib/money";
 import StatusBadge, { Notice } from "@/components/StatusBadge";
 
 export const dynamic = "force-dynamic";
 
-const ORDER: Status[] = ["in_review", "approved", "proof_rejected", "sold_out", "open", "paid_out"];
+const ORDER: Status[] = ["in_review", "proof_overdue", "confirming", "stickers_due", "proof_rejected", "running", "live", "upcoming", "complete", "unsold"];
 
 export default async function Admin({ searchParams }: { searchParams: Promise<{ error?: string }> }) {
   const { error } = await searchParams;
@@ -29,10 +30,14 @@ export default async function Admin({ searchParams }: { searchParams: Promise<{ 
     );
   }
 
-  const listings = (await getAllListings()).sort((a, b) => ORDER.indexOf(a.status) - ORDER.indexOf(b.status));
-  const totals = listings.reduce((s, l) => ({ gross: s.gross + l.gross, fees: s.fees + l.fees, tiles: s.tiles + l.sold }), { gross: 0, fees: 0, tiles: 0 });
-  const owed = listings.filter((l) => l.status === "approved").reduce((s, l) => s + l.payout, 0);
+  const [all, creators] = await Promise.all([getAllListings(), getAllCreators()]);
+  const listings = all.sort((a, b) => ORDER.indexOf(a.status) - ORDER.indexOf(b.status));
+  const sold = listings.filter((l) => l.confirmed);
+  const totals = sold.reduce((s, l) => ({ fees: s.fees + l.fees, tiles: s.tiles + l.sold }), { fees: 0, tiles: 0 });
+  const owed = listings.filter(payoutOwed).reduce((s, l) => s + l.payout, 0);
   const review = listings.filter((l) => l.status === "in_review").length;
+  const pending = creators.filter((c) => c.status === "pending");
+  const others = creators.filter((c) => c.status !== "pending");
 
   return (
     <div className="space-y-6">
@@ -41,10 +46,11 @@ export default async function Admin({ searchParams }: { searchParams: Promise<{ 
         <form action={adminLogout}><button className="btn-ghost">Log out</button></form>
       </div>
       {error && <Notice>{error}</Notice>}
-      <div className="grid gap-4 sm:grid-cols-4">
+      <div className="grid gap-4 sm:grid-cols-5">
         {[
+          ["Creators to review", String(pending.length)],
           ["Proofs to review", String(review)],
-          ["Tiles sold", String(totals.tiles)],
+          ["Spots sold", String(totals.tiles)],
           ["Platform revenue", fmt(totals.fees)],
           ["Payouts owed", fmt(owed)],
         ].map(([k, v]) => (
@@ -52,6 +58,49 @@ export default async function Admin({ searchParams }: { searchParams: Promise<{ 
         ))}
       </div>
 
+      <h2 className="text-xl font-semibold">Creators</h2>
+      {creators.length === 0 && <div className="card text-stone-600">No applications yet.</div>}
+      {[...pending, ...others].map((c) => (
+        <div key={c.meta.id} id={`c-${c.meta.id}`} className="card grid gap-4 md:grid-cols-[1fr_260px]">
+          <div className="space-y-1 text-sm">
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="text-base font-semibold">{c.meta.name}</span>
+              <span className="rounded-full border-2 border-stone-900 bg-white px-2 py-0.5 text-xs font-bold">{CREATOR_STATUS_LABEL[c.status]}</span>
+              {c.strikes > 0 && <span className="rounded-full bg-red-100 px-2 py-0.5 text-xs font-bold text-red-800">{c.strikes} strike{c.strikes > 1 ? "s" : ""}</span>}
+            </div>
+            <div className="text-stone-500">{c.meta.email} · {fmtFollowers(c.meta.followers)} on {c.meta.platform} ({tierOf(c.meta.followers)})</div>
+            <div className="break-all">{c.meta.handle}</div>
+            {c.meta.about && <div className="rounded bg-stone-50 p-2 text-stone-600">{c.meta.about}</div>}
+          </div>
+          <div className="space-y-2">
+            {c.status !== "verified" && c.status !== "removed" && (
+              <form action={adminCreatorAction}>
+                <input type="hidden" name="id" value={c.meta.id} />
+                <input type="hidden" name="action" value="approve" />
+                <SubmitButton className="w-full">Verify creator</SubmitButton>
+              </form>
+            )}
+            {c.status === "pending" && (
+              <form action={adminCreatorAction} className="space-y-2">
+                <input type="hidden" name="id" value={c.meta.id} />
+                <input type="hidden" name="action" value="reject" />
+                <input className="input" name="reason" placeholder="Reason (shown to them)" />
+                <SubmitButton variant="secondary" className="w-full">Reject</SubmitButton>
+              </form>
+            )}
+            {c.status === "verified" && (
+              <form action={adminCreatorAction} className="space-y-2">
+                <input type="hidden" name="id" value={c.meta.id} />
+                <input type="hidden" name="action" value="strike" />
+                <input className="input" name="reason" placeholder="Reason for strike" />
+                <SubmitButton variant="secondary" className="w-full">Add strike</SubmitButton>
+              </form>
+            )}
+          </div>
+        </div>
+      ))}
+
+      <h2 className="pt-4 text-xl font-semibold">Listings</h2>
       {listings.length === 0 && <div className="card text-stone-600">No listings yet.</div>}
       {listings.map((l) => (
         <div key={l.meta.id} id={l.meta.id} className="card grid gap-5 md:grid-cols-[200px_1fr_260px]">
@@ -62,16 +111,22 @@ export default async function Admin({ searchParams }: { searchParams: Promise<{ 
               <Link href={`/l/${l.meta.id}`} className="text-base font-semibold hover:underline">{l.meta.title}</Link>
               <StatusBadge status={l.status} />
             </div>
-            <div className="text-stone-500">{l.meta.listerName} · {l.meta.listerEmail}</div>
-            <div>{l.sold}/{l.total} tiles · gross {fmt(l.gross)} · fee {fmt(l.fees)} · lister {fmt(l.payout)}</div>
+            <div className="text-stone-500">{l.meta.listerName} · {l.creator?.meta.email} · {TERMS[l.meta.term].label}</div>
+            <div>{l.sold}/{l.total} spots · gross {fmt(l.gross)} · fee {fmt(l.fees)} · creator {fmt(l.payout)}{l.paid ? " (paid)" : ""}</div>
+            <div className="text-stone-500">
+              Timer ends {fmtDateTime(l.meta.closesAt)}
+              {l.status === "confirming" && ` · creator must confirm by ${fmtDateTime(l.confirmBy)}`}
+              {l.confirmed && ` · proofs ${l.proofsApproved}/${l.proofsTotal}`}
+              {l.nextProofDue && ` · next due ${fmtDateTime(l.nextProofDue)}`}
+            </div>
             {l.sold > 0 && (
               <div className="flex flex-wrap gap-1.5">
                 {Object.values(l.tiles).sort((a, b) => a.index - b.index).map((t) => (
-                  <span key={t.index} className="rounded-full bg-stone-100 px-2 py-0.5 text-xs" title={`${t.email} · ${t.paymentRef}`}>#{t.index + 1} {t.brandName}</span>
+                  <a key={t.index} href={t.logoUrl} target="_blank" rel="noopener noreferrer" className="rounded-full bg-stone-100 px-2 py-0.5 text-xs" title={`${t.email} · ${t.paymentRef} · open logo to print`}>#{t.index + 1} {t.brandName} {fmt(t.amount)}</a>
                 ))}
               </div>
             )}
-            {l.latestProof?.note && <div className="rounded bg-stone-50 p-2 text-stone-600">Lister note: {l.latestProof.note}</div>}
+            {l.latestProof?.note && <div className="rounded bg-stone-50 p-2 text-stone-600">Creator note: {l.latestProof.note}</div>}
           </div>
           <div className="space-y-3">
             {l.latestProof ? (
@@ -87,7 +142,7 @@ export default async function Admin({ searchParams }: { searchParams: Promise<{ 
                 <form action={adminAction}>
                   <input type="hidden" name="id" value={l.meta.id} />
                   <input type="hidden" name="action" value="approve" />
-                  <SubmitButton className="w-full">Approve proof</SubmitButton>
+                  <SubmitButton className="w-full">Approve proof {l.proofsApproved + 1} of {l.proofsTotal}</SubmitButton>
                 </form>
                 <form action={adminAction} className="space-y-2">
                   <input type="hidden" name="id" value={l.meta.id} />
@@ -97,11 +152,19 @@ export default async function Admin({ searchParams }: { searchParams: Promise<{ 
                 </form>
               </div>
             )}
-            {l.status === "approved" && (
+            {payoutOwed(l) && (
               <form action={adminAction}>
                 <input type="hidden" name="id" value={l.meta.id} />
                 <input type="hidden" name="action" value="paid" />
-                <SubmitButton className="w-full">Mark {fmt(l.payout)} paid to lister</SubmitButton>
+                <SubmitButton className="w-full">Mark {fmt(l.payout)} paid to creator</SubmitButton>
+              </form>
+            )}
+            {l.status === "proof_overdue" && l.creator?.status === "verified" && (
+              <form action={adminCreatorAction}>
+                <input type="hidden" name="id" value={l.creator.meta.id} />
+                <input type="hidden" name="action" value="strike" />
+                <input type="hidden" name="reason" value={`Missed proof on ${l.meta.title}`} />
+                <SubmitButton variant="secondary" className="w-full">Strike for missed proof</SubmitButton>
               </form>
             )}
           </div>

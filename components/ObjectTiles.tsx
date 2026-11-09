@@ -9,12 +9,13 @@ export default function ObjectTiles(props: {
   id: string;
   template: Template;
   tiles: Record<number, Tile>;
-  price: number;
+  /** Lowest bid accepted next on each spot, in pence. */
+  ask?: Record<number, number>;
   buyable?: boolean;
   highlight?: number;
   compact?: boolean;
 }) {
-  const { id, template: t, tiles, price, buyable, highlight, compact } = props;
+  const { id, template: t, tiles, ask = {}, buyable, highlight, compact } = props;
   const per = t.slots.length;
   const zones = [...new Map(t.slots.map((s) => [s.zone, s])).values()];
   return (
@@ -44,13 +45,14 @@ export default function ObjectTiles(props: {
                           <image href={sold.logoUrl} x={x + 2} y={slot.y + 2} width={slot.w - 4} height={slot.h - 4} preserveAspectRatio="xMidYMid meet"><title>{sold.brandName}</title></image>
                         </>
                       );
+                      if (buyable) return <a key={i} href={`/l/${id}/buy/${i}`} aria-label={`Outbid ${sold.brandName} on spot ${i + 1}`} className="transition-opacity hover:opacity-75">{inner}</a>;
                       return sold.website && !compact ? (
                         <a key={i} href={sold.website} target="_blank" rel="noopener noreferrer sponsored">{inner}</a>
                       ) : (
                         <g key={i}>{inner}</g>
                       );
                     }
-                    const text = buyable ? fmt(price).replace(/\.00$/, "") : String(i + 1);
+                    const text = buyable ? fmt(ask[i] ?? 0).replace(/\.00$/, "") : slot.prime ? "HERO" : String(i + 1);
                     const size = Math.min(10, slot.h * 0.42, (slot.w - 4) / (text.length * 0.62));
                     const label = (
                       <>
@@ -63,7 +65,7 @@ export default function ObjectTiles(props: {
                       </>
                     );
                     return buyable ? (
-                      <a key={i} href={`/l/${id}/buy/${i}`} aria-label={`Sponsor tile ${i + 1}, ${slot.zone}${side ? `, ${side}` : ""}`} className="transition-opacity hover:opacity-75">{label}</a>
+                      <a key={i} href={`/l/${id}/buy/${i}`} aria-label={`Bid on spot ${i + 1}, ${slot.zone}${side ? `, ${side}` : ""}`} className="transition-opacity hover:opacity-75">{label}</a>
                     ) : (
                       <g key={i}>{label}</g>
                     );
@@ -84,7 +86,7 @@ export default function ObjectTiles(props: {
           {zones.map((z) => (
             <li key={z.zone} className="flex items-center gap-1.5">
               <span className="inline-block h-3 w-3 rounded-[3px] border-[1.5px] border-stone-900" style={{ background: z.color }} />
-              {z.zone}
+              {z.zone}{z.prime && <span className="rounded-full border-[1.5px] border-stone-900 bg-white px-1.5 text-[10px] font-bold">HERO</span>}
             </li>
           ))}
         </ul>
