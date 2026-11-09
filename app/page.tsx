@@ -8,6 +8,22 @@ import CategoryIcon from "@/components/CategoryIcon";
 import Progress from "@/components/arc/progress/progress";
 import EmptyState from "@/components/arc/empty-state/empty-state";
 import { CATEGORIES } from "@/lib/categories";
+import BrandsFeature from "@/components/home/BrandsFeature";
+import { Faq5 } from "@/components/ui/faq-5";
+import { Cta1 } from "@/components/ui/cta-1";
+
+const FAQ = [
+  {
+    title: "Questions",
+    description: "How payments, proof and payouts work.",
+    items: [
+      { question: "When does the lister get paid?", answer: `Once every sponsor's logo is on the object and we approve the proof photo. We release the tile price minus our ${FEE_RATE * 100}% fee.` },
+      { question: "What if the logo never goes on?", answer: "Your payment is held by us, not the lister. If no valid proof arrives, you get refunded." },
+      { question: "What can I list?", answer: "Anything you own and use in public: cars, bikes, guitars, prom dresses, sports kit, laptops and more." },
+      { question: "How big is a tile?", answer: "You choose the grid, up to 8 by 8. Each cell on your photo is one logo spot." },
+    ],
+  },
+];
 
 export const dynamic = "force-dynamic";
 
@@ -65,6 +81,8 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ c
         </ol>
       </section>
 
+      <BrandsFeature />
+
       <section id="browse" className="scroll-mt-24">
         <h2 className="text-3xl font-semibold text-balance">Objects looking for sponsors</h2>
         <div className="mt-6 flex flex-wrap gap-2">
@@ -105,6 +123,18 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ c
           </div>
         )}
       </section>
+      <div id="faq" className="scroll-mt-24 [&>section]:p-0 [&_.max-w-7xl]:px-0">
+        <Faq5 categories={FAQ} />
+      </div>
+
+      <div className="flex justify-center [&>section]:max-w-none [&>section]:py-0 [&_.container]:px-0">
+        <Cta1
+          title="Got something people see?"
+          description="List it in two minutes. Brands do the rest."
+          buttonText="List your first object"
+          buttonLink="/list/new"
+        />
+      </div>
     </div>
   );
 }

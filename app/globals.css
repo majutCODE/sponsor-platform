@@ -20,6 +20,25 @@
   --color-indigo-600: var(--accent);
   --color-indigo-700: var(--accent-strong);
   --color-indigo-900: var(--accent-strong);
+  /* shadcn token names used by Watermelon UI blocks, pointed at Arc tokens. */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--surface-raised);
+  --color-card-foreground: var(--foreground);
+  --color-popover: var(--surface-raised);
+  --color-popover-foreground: var(--foreground);
+  --color-muted: var(--surface-muted);
+  --color-muted-foreground: var(--text-secondary);
+  --color-primary: var(--accent);
+  --color-primary-foreground: var(--accent-foreground);
+  --color-secondary: var(--surface-muted);
+  --color-secondary-foreground: var(--foreground);
+  --color-accent: var(--surface-muted);
+  --color-accent-foreground: var(--foreground);
+  --color-border: var(--border);
+  --color-input: var(--border);
+  --color-ring: var(--accent);
+  --color-destructive: var(--danger);
 }
 
 /* Tighter panels read less "template"; inner radii derive from this (outer minus padding). */
@@ -52,3 +71,4 @@ h1, h2, h3 { font-family: var(--font-display); letter-spacing: -0.025em; }
   border-radius: var(--radius-panel); box-shadow: var(--shadow-resting);
 }
 input[type="checkbox"] { accent-color: var(--foreground); width: 1rem; height: 1rem; }
+@layer base { *, ::before, ::after { border-color: var(--color-border); } }

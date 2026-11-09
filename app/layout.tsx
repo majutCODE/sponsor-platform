@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { GeistSans } from "geist/font/sans";
 import "./globals.css";
+import { Footer3 } from "@/components/ui/footer-3";
 
 export const metadata: Metadata = {
   title: "TileSponsor",
@@ -38,12 +39,19 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </div>
         </header>
         <main className="mx-auto max-w-6xl px-5 py-10">{children}</main>
-        <footer className="border-t border-stone-200">
-          <div className="mx-auto flex max-w-6xl flex-col gap-3 px-5 py-8 text-sm text-stone-500 sm:flex-row sm:items-center sm:justify-between">
-            <div className="flex items-center gap-2.5 text-stone-900"><Logo /><span className="font-medium">TileSponsor</span></div>
-            <p>Test mode: payments are simulated. No real money moves.</p>
-          </div>
-        </footer>
+        <div className="mx-auto max-w-6xl [&>footer]:px-5">
+        <Footer3
+          logo={<Logo />}
+          brandName="TileSponsor"
+          description="Brands sponsor the things people own, one tile at a time. Paid out only on photo proof."
+          linkGroups={[
+            { title: "Listers", links: [{ label: "List an object", href: "/list/new" }, { label: "How it works", href: "/#how" }] },
+            { title: "Brands", links: [{ label: "Browse objects", href: "/#browse" }, { label: "FAQ", href: "/#faq" }] },
+            { title: "Team", links: [{ label: "Admin", href: "/admin" }] },
+          ]}
+          copyright="© 2026 TileSponsor. Test mode: payments are simulated."
+        />
+        </div>
       </body>
     </html>
   );
