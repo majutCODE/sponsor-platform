@@ -39,51 +39,45 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ c
   const counts = new Map<string, number>();
   for (const l of all) counts.set(l.meta.category, (counts.get(l.meta.category) ?? 0) + 1);
   const chip = (active: boolean) =>
-    `inline-flex items-center gap-1.5 border-b py-1 text-sm transition ${active ? "border-stone-900 text-stone-900" : "border-transparent text-stone-600 hover:text-stone-900"}`;
+    `inline-flex items-center gap-1.5 rounded-full border-2 border-stone-900 px-4 py-1.5 text-sm font-semibold transition ${active ? "bg-[var(--s-lime)] shadow-[2px_2px_0_var(--foreground)]" : "bg-white hover:bg-[var(--s-yellow)]"}`;
   return (
     <div className="space-y-28">
-      <section className="pt-2 md:pt-6">
-        <div className="grid gap-8 md:grid-cols-12 md:items-end">
-          <h1 className="text-[3.4rem] text-balance sm:text-7xl md:col-span-8 lg:text-[6.2rem]">
-            Brands pay to put their logo on your car.
+      <section className="grid grid-cols-[minmax(0,1fr)] items-center gap-12 pt-2 md:grid-cols-[minmax(0,5fr)_minmax(0,6fr)] md:pt-8">
+        <div>
+          <h1 className="text-[3.1rem] text-balance sm:text-7xl lg:text-[4.7rem]">
+            Brands pay to put their logo on <span className="hl">your car.</span>
           </h1>
-          <div className="md:col-span-4 md:pb-3">
-            <p className="text-lg leading-relaxed text-pretty text-stone-700">
-              Or your guitar, prom dress or anything else you own. We split it into tiles, brands buy them, and you get
-              paid once a photo shows the logos are on.
-            </p>
-            <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-3">
-              <Link href="/list/new" className="btn btn-accent !min-h-12 !px-6 text-[15px]">List your first object</Link>
-              <Link href="#browse" className="text-sm font-medium text-stone-900 underline decoration-stone-300 underline-offset-4 hover:decoration-stone-900">
-                Sponsor something
-              </Link>
-            </div>
+          <p className="mt-6 max-w-md text-lg leading-relaxed text-pretty text-stone-700">
+            Or your guitar, prom dress or anything else you own. Brands buy a spot like a sticker, and you get paid once
+            a photo shows it&apos;s on.
+          </p>
+          <div className="mt-8 flex flex-wrap items-center gap-4">
+            <Link href="/list/new" className="btn btn-accent !min-h-14 !px-7 text-base">List your first object</Link>
+            <Link href="#browse" className="btn-ghost !min-h-14 !px-7 text-base">Sponsor something</Link>
           </div>
+          <dl className="mt-10 flex flex-wrap gap-3 text-sm">
+            {[
+              ["You keep", `${100 - FEE_RATE * 100}%`, "var(--s-yellow)", "-rotate-2"],
+              ["Tiles", "Up to 64", "var(--s-pink)", "rotate-1"],
+              ["Paid", "On proof", "#fff", "-rotate-1"],
+            ].map(([k, v, bg, r]) => (
+              <div key={k} className={`sticker rounded-2xl px-4 py-2 ${r}`} style={{ background: bg }}>
+                <dt className="text-xs font-semibold">{k}</dt>
+                <dd className="display text-xl tabular-nums">{v}</dd>
+              </div>
+            ))}
+          </dl>
         </div>
-        <div className="mt-12">
-          <HeroCar />
-        </div>
-        <dl className="mt-8 grid grid-cols-3 border-t border-stone-900 text-sm">
-          {[
-            ["You keep", `${100 - FEE_RATE * 100}%`],
-            ["Tiles per object", "Up to 64"],
-            ["Paid out", "On proof"],
-          ].map(([k, v], i) => (
-            <div key={k} className={`pt-4 ${i ? "border-l border-stone-200 pl-5" : ""}`}>
-              <dt className="text-stone-600">{k}</dt>
-              <dd className="display mt-1 text-3xl tabular-nums sm:text-4xl">{v}</dd>
-            </div>
-          ))}
-        </dl>
+        <HeroCar />
       </section>
 
       <section id="how" className="scroll-mt-24">
         <h2 className="max-w-2xl text-5xl text-balance">From listing to payout in four steps</h2>
-        <ol className="mt-10 grid gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">
+        <ol className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {STEPS.map(([t, d], i) => (
-            <li key={t} className="border-t border-stone-900 pt-4">
-              <div className="display text-5xl tabular-nums text-indigo-600">{i + 1}</div>
-              <div className="mt-3 font-semibold">{t}</div>
+            <li key={t} className="card">
+              <div className="sticker grid h-12 w-12 place-items-center rounded-full text-xl font-extrabold tabular-nums" style={{ background: ["var(--s-lime)", "var(--s-yellow)", "var(--s-pink)", "var(--accent)"][i], transform: `rotate(${[-6, 4, -3, 6][i]}deg)` }}>{i + 1}</div>
+              <div className="mt-4 text-lg font-extrabold">{t}</div>
               <p className="mt-1.5 text-sm leading-relaxed text-stone-700">{d}</p>
             </li>
           ))}
@@ -94,7 +88,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ c
 
       <section id="browse" className="scroll-mt-24">
         <h2 className="text-5xl text-balance">Objects looking for sponsors</h2>
-        <div className="mt-8 flex flex-wrap gap-x-6 gap-y-2 border-b border-stone-200 pb-px">
+        <div className="mt-8 flex flex-wrap gap-2.5">
           <Link href="/#browse" scroll={false} className={chip(!cat)}>All <span className="tabular-nums opacity-60">{all.length}</span></Link>
           {CATEGORIES.map((c) => (
             <Link key={c.name} href={`/?cat=${encodeURIComponent(c.name)}#browse`} scroll={false} className={chip(cat === c.name)}>
@@ -113,18 +107,18 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ c
         ) : (
           <div className="mt-8 grid gap-x-6 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
             {listings.map((l) => (
-              <Link key={l.meta.id} href={`/l/${l.meta.id}`} className="group block">
-                <div className="overflow-hidden rounded-[var(--radius-panel)] transition group-hover:opacity-90">
+              <Link key={l.meta.id} href={`/l/${l.meta.id}`} className="card group block !p-3 transition hover:-translate-y-1">
+                <div className="overflow-hidden rounded-[calc(var(--radius-panel)-12px)] border-2 border-stone-900">
                   <TileGrid id={l.meta.id} imageUrl={l.meta.imageUrl} rows={l.meta.rows} cols={l.meta.cols} tiles={l.tiles} price={l.meta.tilePrice} compact />
                 </div>
-                <div className="flex items-start justify-between gap-2 pt-4">
+                <div className="flex items-start justify-between gap-2 px-1 pt-4">
                   <div>
-                    <div className="display text-2xl">{l.meta.title}</div>
+                    <div className="display text-xl">{l.meta.title}</div>
                     <div className="mt-0.5 text-sm text-stone-600"><span className="tabular-nums">{fmt(l.meta.tilePrice)}</span> a tile · {l.meta.category}</div>
                   </div>
                   <StatusBadge status={l.status} />
                 </div>
-                <div className="pt-4">
+                <div className="px-1 pb-1 pt-4">
                   <Progress value={l.sold} max={l.total} label={`${l.sold} of ${l.total} tiles sponsored`} />
                 </div>
               </Link>
@@ -136,7 +130,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ c
         <Faq5 categories={FAQ} />
       </div>
 
-      <section className="-mx-5 bg-stone-900 px-5 py-16 text-[var(--background)] sm:mx-0 sm:px-12 sm:py-20" style={{ borderRadius: "var(--radius-panel)" }}>
+      <section className="sticker -mx-1 rounded-[28px] bg-[var(--s-blue)] px-6 py-14 text-white sm:px-12 sm:py-16" style={{ boxShadow: "8px 8px 0 var(--foreground)" }}>
         <div className="grid gap-8 md:grid-cols-12 md:items-end">
           <h2 className="text-5xl text-balance sm:text-6xl md:col-span-8">Got something people see? List it in two minutes.</h2>
           <div className="md:col-span-4 md:text-right">

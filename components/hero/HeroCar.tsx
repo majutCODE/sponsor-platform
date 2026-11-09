@@ -3,18 +3,20 @@ import dynamic from "next/dynamic";
 
 const CarScene = dynamic(() => import("./CarScene"), {
   ssr: false,
-  loading: () => <div className="h-full w-full animate-pulse rounded-[var(--radius-panel)] bg-stone-100" />,
+  loading: () => <div className="h-full w-full animate-pulse rounded-[28px] bg-[var(--s-blue)]" />,
 });
 
 export default function HeroCar() {
   return (
     <figure className="m-0 w-full">
-      <div className="aspect-[4/3] w-full overflow-hidden rounded-[var(--radius-panel)] bg-[#ebe5d8] sm:aspect-[21/9]">
+      <div className="sticker relative aspect-[4/3] w-full overflow-hidden rounded-[28px] bg-[var(--s-blue)]" style={{ boxShadow: "8px 8px 0 var(--foreground)" }}>
+        <span className="sticker pointer-events-none absolute left-5 top-5 z-10 -rotate-6 rounded-xl bg-[var(--s-yellow)] px-3 py-1.5 text-sm font-extrabold">£40 a spot</span>
+        <span className="sticker pointer-events-none absolute bottom-5 right-5 z-10 rotate-3 rounded-full bg-white px-3 py-1.5 text-sm font-extrabold tabular-nums">8 of 12 taken</span>
         <CarScene />
       </div>
       <figcaption className="flex items-center justify-between gap-3 pt-3 text-sm">
-        <span className="text-stone-900">Fig. 1. A hatchback with 12 sponsor tiles. Drag to turn it.</span>
-        <span className="tabular-nums text-stone-600">8 of 12 sponsored · £40 a tile</span>
+        <span className="font-semibold text-stone-900">A hatchback with 12 sponsor spots. Drag to spin it.</span>
+        
       </figcaption>
     </figure>
   );

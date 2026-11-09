@@ -1,12 +1,11 @@
 @import "tailwindcss";
 @import "../components/arc/foundation.css";
-@import "@fontsource/instrument-serif/latin-400.css";
-@import "@fontsource-variable/instrument-sans/wght.css";
+@import "@fontsource-variable/bricolage-grotesque/wght.css";
 
 /* Map Tailwind's palette onto Arc tokens so every page shares one system. */
 @theme inline {
-  --font-sans: "Instrument Sans Variable", ui-sans-serif, system-ui, sans-serif;
-  --font-serif: "Instrument Serif", ui-serif, Georgia, serif;
+  --font-sans: "Bricolage Grotesque Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Bricolage Grotesque Variable", sans-serif;
   --color-stone-50: var(--surface-muted);
   --color-stone-100: var(--surface-muted);
   --color-stone-200: var(--border);
@@ -44,61 +43,63 @@
   --color-destructive: var(--danger);
 }
 
-/* Editorial design language: warm paper, ink, one brick accent, hairline rules,
-   serif display type over a quiet grotesk. Overrides Arc's neutral defaults. */
+/* Sticker-bomb design language: cream paper, ink outlines, hard offset shadows,
+   pill buttons and a small set of loud sticker colours. Overrides Arc defaults. */
 :root {
-  --background: #f6f3ec;
-  --surface: #fbf9f4;
-  --surface-raised: #fdfbf7;
-  --surface-muted: #eee9df;
-  --foreground: #161512;
-  --ink-2: #2e2b26;
-  --text-secondary: #57534b;
-  --text-muted: #77726a;
-  --border: #ddd6c8;
-  --border-subtle: #e8e2d6;
-  --border-strong: #b9b09f;
-  --accent: #8b2c1c;
-  --accent-strong: #6f2215;
-  --accent-subtle: rgb(139 44 28 / .09);
-  --accent-foreground: #fbf9f4;
-  --control-on: #161512;
-  --radius-panel: 6px;
-  --radius-control: 4px;
-  --radius-surface: 8px;
-  --font-geist: "Instrument Sans Variable";
-  --font-inter: "Instrument Sans Variable";
-  --font-display: "Instrument Serif", Georgia, serif;
+  --background: #fff6e5;
+  --surface: #fffaf0;
+  --surface-raised: #ffffff;
+  --surface-muted: #f6ead2;
+  --foreground: #1d1a16;
+  --ink-2: #35302a;
+  --text-secondary: #4b453c;
+  --text-muted: #6f675b;
+  --border: #1d1a16;
+  --border-subtle: #e6d8bd;
+  --border-strong: #1d1a16;
+  --accent: #ff5a36;
+  --accent-strong: #e8431f;
+  --accent-subtle: rgb(255 90 54 / .12);
+  --accent-foreground: #ffffff;
+  --control-on: #1d1a16;
+  --s-lime: #c6f45b;
+  --s-yellow: #ffd23f;
+  --s-pink: #ff8fd1;
+  --s-blue: #2b6cff;
+  --radius-panel: 22px;
+  --radius-control: 999px;
+  --radius-surface: 28px;
+  --font-geist: "Bricolage Grotesque Variable";
+  --font-inter: "Bricolage Grotesque Variable";
 }
-body { background: var(--background); color: var(--foreground); font-family: var(--font-sans); font-size: 15.5px; }
-h1, h2, .display { font-family: var(--font-serif); font-weight: 400 !important; letter-spacing: -0.015em; line-height: 1.02; }
-h3 { letter-spacing: -0.01em; }
-::selection { background: var(--accent); color: var(--accent-foreground); }
+body { background: var(--background); color: var(--foreground); font-family: var(--font-sans); font-size: 16px; }
+h1, h2, .display { font-family: var(--font-display); font-weight: 800; letter-spacing: -0.035em; line-height: .98; }
+h3 { font-weight: 700; letter-spacing: -0.01em; }
+::selection { background: var(--s-lime); color: var(--foreground); }
+.hl { background: var(--s-lime); padding: 0 .18em; border-radius: .22em; display: inline-block; transform: rotate(-2deg); }
+.sticker { border: 2.5px solid var(--foreground); box-shadow: 4px 4px 0 var(--foreground); }
 
 .btn, .btn-ghost {
-  @apply inline-flex items-center justify-center gap-2 whitespace-nowrap px-4 text-sm font-medium transition active:scale-[0.97] disabled:opacity-50;
-  min-height: var(--control-height-md, 2.5rem); border-radius: var(--radius-control); border: 1px solid transparent; letter-spacing: .01em;
+  @apply inline-flex items-center justify-center gap-2 whitespace-nowrap px-5 text-sm font-bold transition disabled:opacity-50;
+  min-height: var(--control-height-md, 2.75rem); border-radius: 999px; border: 2.5px solid var(--foreground);
 }
-.btn { background: var(--foreground); color: var(--background); }
-.btn:hover { background: var(--ink-2); }
-.btn-ghost { background: var(--surface); color: var(--foreground); border-color: var(--border); }
-.btn-ghost:hover { background: var(--surface-muted); }
-.btn-accent { background: var(--accent); color: var(--accent-foreground); }
-.btn-accent:hover { background: var(--accent-strong); opacity: 1; }
+.btn { background: var(--foreground); color: var(--background); box-shadow: 3px 3px 0 var(--accent); }
+.btn-ghost { background: var(--surface); color: var(--foreground); }
+.btn-accent { background: var(--accent); color: var(--accent-foreground); box-shadow: 4px 4px 0 var(--foreground); }
+.btn:hover, .btn-ghost:hover { transform: translate(-1px, -1px); }
+.btn:active, .btn-ghost:active { transform: translate(2px, 2px); box-shadow: 0 0 0 var(--foreground); }
 
 .input {
-  @apply mt-1.5 block w-full px-3.5 py-2.5 text-sm transition;
-  background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-control);
+  @apply mt-1.5 block w-full px-4 py-2.5 text-sm transition;
+  background: #fff; border: 2px solid var(--foreground); border-radius: 14px;
 }
-.input:hover { border-color: var(--border-strong); }
-.input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-subtle); }
+.input:focus { outline: none; box-shadow: 3px 3px 0 var(--accent); }
 .input[type="file"] { @apply py-2; }
-.input[type="file"]::file-selector-button { @apply mr-3 rounded-sm border-0 px-3 py-1 text-xs font-medium; background: var(--surface-muted); color: var(--foreground); }
-.label { @apply block text-sm font-medium; color: var(--foreground); }
+.input[type="file"]::file-selector-button { @apply mr-3 rounded-full px-3 py-1 text-xs font-bold; border: 2px solid var(--foreground); background: var(--s-yellow); color: var(--foreground); }
+.label { @apply block text-sm font-bold; color: var(--foreground); }
 .card {
-  @apply p-6; background: var(--surface-raised); border: 1px solid var(--border);
-  border-radius: var(--radius-panel);
+  @apply p-6; background: var(--surface-raised); border: 2.5px solid var(--foreground);
+  border-radius: var(--radius-panel); box-shadow: 5px 5px 0 var(--foreground);
 }
-.rule { border-top: 1px solid var(--foreground); }
-input[type="checkbox"] { accent-color: var(--foreground); width: 1rem; height: 1rem; }
+input[type="checkbox"] { accent-color: var(--accent); width: 1.1rem; height: 1.1rem; }
 @layer base { *, ::before, ::after { border-color: var(--color-border); } }
