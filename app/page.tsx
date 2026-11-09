@@ -6,7 +6,7 @@ import StatusBadge from "@/components/StatusBadge";
 import HeroCar from "@/components/hero/HeroCar";
 import Progress from "@/components/arc/progress/progress";
 import EmptyState from "@/components/arc/empty-state/empty-state";
-import { CATEGORIES } from "@/lib/categories";
+import { CATEGORIES, categoryOf } from "@/lib/categories";
 import BrandsFeature from "@/components/home/BrandsFeature";
 import { Faq5 } from "@/components/ui/faq-5";
 
@@ -35,9 +35,9 @@ const STEPS = [
 export default async function Home({ searchParams }: { searchParams: Promise<{ cat?: string }> }) {
   const { cat } = await searchParams;
   const all = await getAllListings();
-  const listings = cat ? all.filter((l) => l.meta.category === cat) : all;
+  const listings = cat ? all.filter((l) => categoryOf(l.meta.category) === cat) : all;
   const counts = new Map<string, number>();
-  for (const l of all) counts.set(l.meta.category, (counts.get(l.meta.category) ?? 0) + 1);
+  for (const l of all) counts.set(categoryOf(l.meta.category), (counts.get(categoryOf(l.meta.category)) ?? 0) + 1);
   const chip = (active: boolean) =>
     `inline-flex items-center gap-1.5 rounded-full border-2 border-stone-900 px-4 py-1.5 text-sm font-semibold transition ${active ? "bg-[var(--s-lime)] shadow-[2px_2px_0_var(--foreground)]" : "bg-white hover:bg-[var(--s-yellow)]"}`;
   return (
@@ -109,12 +109,12 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ c
             {listings.map((l) => (
               <Link key={l.meta.id} href={`/l/${l.meta.id}`} className="card group block !p-3 transition hover:-translate-y-1">
                 <div className="overflow-hidden rounded-[calc(var(--radius-panel)-12px)] border-2 border-stone-900">
-                  <TileGrid id={l.meta.id} imageUrl={l.meta.imageUrl} rows={l.meta.rows} cols={l.meta.cols} tiles={l.tiles} price={l.meta.tilePrice} compact />
+                  <TileGrid id={l.meta.id} imageUrl={l.meta.imageUrl} rows={l.meta.rows} cols={l.meta.cols} template={l.meta.template} tiles={l.tiles} price={l.meta.tilePrice} compact />
                 </div>
                 <div className="flex items-start justify-between gap-2 px-1 pt-4">
                   <div>
                     <div className="display text-xl">{l.meta.title}</div>
-                    <div className="mt-0.5 text-sm text-stone-600"><span className="tabular-nums">{fmt(l.meta.tilePrice)}</span> a tile · {l.meta.category}</div>
+                    <div className="mt-0.5 text-sm text-stone-600"><span className="tabular-nums">{fmt(l.meta.tilePrice)}</span> a tile · {categoryOf(l.meta.category)}</div>
                   </div>
                   <StatusBadge status={l.status} />
                 </div>

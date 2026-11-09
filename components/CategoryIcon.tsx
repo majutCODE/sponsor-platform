@@ -1,14 +1,11 @@
-import { Bike, Car, Dumbbell, Gem, Guitar, Laptop, Package, Shirt, Sofa, type LucideIcon } from "lucide-react";
+import { Bike, Car, Gem, Guitar, Package, Shirt, type LucideIcon } from "lucide-react";
 
 const ICONS: Record<string, LucideIcon> = {
   "Prom & formal wear": Gem,
-  Clothing: Shirt,
   Cars: Car,
-  "Motorbikes & bikes": Bike,
-  "Sports gear": Dumbbell,
-  "Musical instruments": Guitar,
-  "Tech & gadgets": Laptop,
-  "Home & furniture": Sofa,
+  Motorbikes: Bike,
+  "Sports kits": Shirt,
+  Guitars: Guitar,
 };
 
 export default function CategoryIcon({ name, className }: { name: string; className?: string }) {

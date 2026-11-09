@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { canBuy, getListing } from "@/lib/data";
 import { fmt } from "@/lib/money";
+import { categoryOf } from "@/lib/categories";
 import TileGrid from "@/components/TileGrid";
 import StatusBadge, { Notice } from "@/components/StatusBadge";
 
@@ -21,14 +22,21 @@ export default async function ListingPage({ params, searchParams }: { params: Pr
       {error && <Notice>{error}</Notice>}
       <div className="grid gap-8 lg:grid-cols-[3fr_2fr]">
         <div>
-          <TileGrid id={id} imageUrl={l.meta.imageUrl} rows={l.meta.rows} cols={l.meta.cols} tiles={l.tiles} price={l.meta.tilePrice} buyable={buyable} highlight={bought !== undefined ? Number(bought) : undefined} />
+          <TileGrid id={id} imageUrl={l.meta.imageUrl} rows={l.meta.rows} cols={l.meta.cols} template={l.meta.template} tiles={l.tiles} price={l.meta.tilePrice} buyable={buyable} highlight={bought !== undefined ? Number(bought) : undefined} />
           {buyable && <p className="mt-2 text-sm text-stone-500">Tap an empty tile to sponsor it.</p>}
+          {l.meta.template && (
+            <figure className="m-0 mt-6">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={l.meta.imageUrl} alt={l.meta.title} className="block w-full rounded-[calc(var(--radius-panel)-10px)] border-2 border-stone-900" />
+              <figcaption className="mt-2 text-sm text-stone-500">The real object. Logos go on the matching spots.</figcaption>
+            </figure>
+          )}
         </div>
         <div className="space-y-5">
           <div>
             <StatusBadge status={l.status} />
             <h1 className="mt-2 text-3xl font-semibold">{l.meta.title}</h1>
-            <div className="mt-1 text-sm text-stone-500">{l.meta.category} · listed by {l.meta.listerName}</div>
+            <div className="mt-1 text-sm text-stone-500">{categoryOf(l.meta.category)} · listed by {l.meta.listerName}</div>
           </div>
           {l.meta.description && <p className="whitespace-pre-line text-stone-700">{l.meta.description}</p>}
           <div className="card grid grid-cols-3 gap-2 text-center">

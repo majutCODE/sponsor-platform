@@ -1,6 +1,8 @@
 import Link from "next/link";
 import type { Tile } from "@/lib/data";
 import { fmt } from "@/lib/money";
+import { getTemplate } from "@/lib/templates";
+import ObjectTiles from "@/components/ObjectTiles";
 
 export default function TileGrid(props: {
   id: string;
@@ -12,8 +14,12 @@ export default function TileGrid(props: {
   buyable?: boolean;
   highlight?: number;
   compact?: boolean;
+  /** Set design key. When present the tiles are drawn on the object instead of over the photo. */
+  template?: string;
 }) {
   const { id, imageUrl, rows, cols, tiles, price, buyable, highlight, compact } = props;
+  const template = getTemplate(props.template);
+  if (template) return <ObjectTiles id={id} template={template} tiles={tiles} price={price} buyable={buyable} highlight={highlight} compact={compact} />;
   return (
     <div className="relative overflow-hidden rounded-[calc(var(--radius-panel)-10px)] bg-stone-100">
       {/* eslint-disable-next-line @next/next/no-img-element */}

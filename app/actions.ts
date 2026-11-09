@@ -8,6 +8,7 @@ import { canBuy, canSubmitProof, checkToken, getListing, type ListingEvent, type
 import { feeFor } from "@/lib/money";
 import { adminPassword, isAdmin } from "@/lib/admin";
 import { CATEGORY_NAMES } from "@/lib/categories";
+import { templateKeyFor } from "@/lib/templates";
 
 const str = (fd: FormData, k: string, max = 200) => String(fd.get(k) ?? "").trim().slice(0, max);
 const fail = (path: string, msg: string): never => {
@@ -28,14 +29,15 @@ export async function createListing(fd: FormData) {
   const category = CATEGORY_NAMES.includes(rawCat) ? rawCat : "Other";
   const listerName = str(fd, "listerName", 80);
   const listerEmail = str(fd, "listerEmail", 120);
-  const rows = Number(fd.get("rows"));
-  const cols = Number(fd.get("cols"));
+  const template = templateKeyFor(category);
+  const rows = template ? 0 : Number(fd.get("rows"));
+  const cols = template ? 0 : Number(fd.get("cols"));
   const price = Number(fd.get("price"));
 
   if (!title) fail(back, "Give your object a title.");
   if (!listerName) fail(back, "Add your name.");
   if (!isEmail(listerEmail)) fail(back, "Add a valid email.");
-  if (![rows, cols].every((n) => Number.isInteger(n) && n >= 1 && n <= 8)) fail(back, "Grid must be 1 to 8 rows and columns.");
+  if (!template && ![rows, cols].every((n) => Number.isInteger(n) && n >= 1 && n <= 8)) fail(back, "Grid must be 1 to 8 rows and columns.");
   if (!(price >= 1 && price <= 100000)) fail(back, "Tile price must be between £1 and £100,000.");
 
   const img = await uploadImage(fd.get("image"), "images");
@@ -51,6 +53,7 @@ export async function createListing(fd: FormData) {
     imageUrl: img.url!,
     rows,
     cols,
+    ...(template ? { template } : {}),
     tilePrice: Math.round(price * 100),
     listerName,
     listerEmail,

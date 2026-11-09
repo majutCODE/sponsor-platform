@@ -58,7 +58,7 @@ export default async function Manage({ params, searchParams }: { params: Promise
       <div className="grid gap-6 lg:grid-cols-2">
         <div className="card">
           <div className="mb-3 font-semibold">Logos to apply</div>
-          <TileGrid id={id} imageUrl={l.meta.imageUrl} rows={l.meta.rows} cols={l.meta.cols} tiles={l.tiles} price={l.meta.tilePrice} compact />
+          <TileGrid id={id} imageUrl={l.meta.imageUrl} rows={l.meta.rows} cols={l.meta.cols} template={l.meta.template} tiles={l.tiles} price={l.meta.tilePrice} compact />
           {sponsors.length === 0 ? (
             <p className="mt-3 text-sm text-stone-500">No sponsors yet. Share your public page with brands.</p>
           ) : (
