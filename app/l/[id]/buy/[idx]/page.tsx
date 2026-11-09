@@ -6,6 +6,7 @@ import { canBuy, getListing } from "@/lib/data";
 import { feeFor, fmt } from "@/lib/money";
 import TileGrid from "@/components/TileGrid";
 import { Notice } from "@/components/StatusBadge";
+import { describeTile, getTemplate } from "@/lib/templates";
 
 export const dynamic = "force-dynamic";
 
@@ -17,14 +18,16 @@ export default async function BuyPage({ params, searchParams }: { params: Promis
   const idx = Number(idxStr);
   if (!Number.isInteger(idx) || idx < 0 || idx >= l.total) notFound();
   if (!canBuy(l) || l.tiles[idx]) redirect(`/l/${id}`);
-  const row = Math.floor(idx / l.meta.cols) + 1;
-  const col = (idx % l.meta.cols) + 1;
+  const template = getTemplate(l.meta.template);
+  const where = template
+    ? describeTile(template, idx)
+    : `row ${Math.floor(idx / l.meta.cols) + 1}, column ${(idx % l.meta.cols) + 1}`;
 
   return (
     <div className="grid gap-8 lg:grid-cols-[3fr_2fr]">
       <div>
-        <TileGrid id={id} imageUrl={l.meta.imageUrl} rows={l.meta.rows} cols={l.meta.cols} tiles={l.tiles} price={l.meta.tilePrice} highlight={idx} />
-        <p className="mt-2 text-sm text-stone-500">Highlighted: tile #{idx + 1} (row {row}, column {col})</p>
+        <TileGrid id={id} imageUrl={l.meta.imageUrl} rows={l.meta.rows} cols={l.meta.cols} template={l.meta.template} tiles={l.tiles} price={l.meta.tilePrice} highlight={idx} />
+        <p className="mt-2 text-sm text-stone-500">Highlighted: tile #{idx + 1} ({where})</p>
       </div>
       <div>
         <Link href={`/l/${id}`} className="text-sm text-indigo-600 hover:underline">← {l.meta.title}</Link>

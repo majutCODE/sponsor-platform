@@ -1,4 +1,5 @@
 import { listPrefix, readJSON, sha256 } from "./store";
+import { getTemplate, tileTotal } from "./templates";
 
 export type ListingMeta = {
   id: string;
@@ -8,6 +9,8 @@ export type ListingMeta = {
   imageUrl: string;
   rows: number;
   cols: number;
+  /** Set design key from lib/templates. Absent on listings that use the free grid over the photo. */
+  template?: string;
   tilePrice: number; // pence
   listerName: string;
   listerEmail: string;
@@ -86,7 +89,8 @@ export async function getListing(id: string): Promise<Listing | null> {
   const tiles: Record<number, Tile> = {};
   for (const t of tileList) tiles[t.index] = t;
   const sold = tileList.length;
-  const total = meta.rows * meta.cols;
+  const template = getTemplate(meta.template);
+  const total = template ? tileTotal(template) : meta.rows * meta.cols;
   const gross = tileList.reduce((s, t) => s + t.amount, 0);
   const fees = tileList.reduce((s, t) => s + t.fee, 0);
 
