@@ -1,3 +1,4 @@
+import SubmitButton from "@/components/SubmitButton";
 import Link from "next/link";
 import { adminAction, adminLogin, adminLogout } from "@/app/actions";
 import { adminPassword, isAdmin } from "@/lib/admin";
@@ -14,14 +15,14 @@ export default async function Admin({ searchParams }: { searchParams: Promise<{ 
   if (!(await isAdmin())) {
     return (
       <div className="mx-auto max-w-sm">
-        <h1 className="text-2xl font-bold">Admin</h1>
+        <h1 className="text-2xl font-semibold">Admin</h1>
         {error && <div className="mt-4"><Notice>{error}</Notice></div>}
         {!adminPassword() ? (
           <p className="mt-4 text-sm text-stone-600">Set the ADMIN_PASSWORD environment variable to enable admin.</p>
         ) : (
           <form action={adminLogin} className="card mt-4 space-y-3">
             <input className="input" name="password" type="password" placeholder="Admin password" required />
-            <button className="btn w-full">Log in</button>
+            <SubmitButton className="w-full">Log in</SubmitButton>
           </form>
         )}
       </div>
@@ -36,7 +37,7 @@ export default async function Admin({ searchParams }: { searchParams: Promise<{ 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold">Admin</h1>
+        <h1 className="text-2xl font-semibold">Admin</h1>
         <form action={adminLogout}><button className="btn-ghost">Log out</button></form>
       </div>
       {error && <Notice>{error}</Notice>}
@@ -47,7 +48,7 @@ export default async function Admin({ searchParams }: { searchParams: Promise<{ 
           ["Platform revenue", fmt(totals.fees)],
           ["Payouts owed", fmt(owed)],
         ].map(([k, v]) => (
-          <div key={k} className="card"><div className="text-xs text-stone-500">{k}</div><div className="text-xl font-bold">{v}</div></div>
+          <div key={k} className="card"><div className="text-xs text-stone-500">{k}</div><div className="mt-1 text-2xl font-semibold tabular-nums">{v}</div></div>
         ))}
       </div>
 
@@ -86,13 +87,13 @@ export default async function Admin({ searchParams }: { searchParams: Promise<{ 
                 <form action={adminAction}>
                   <input type="hidden" name="id" value={l.meta.id} />
                   <input type="hidden" name="action" value="approve" />
-                  <button className="btn w-full">Approve proof</button>
+                  <SubmitButton className="w-full">Approve proof</SubmitButton>
                 </form>
                 <form action={adminAction} className="space-y-2">
                   <input type="hidden" name="id" value={l.meta.id} />
                   <input type="hidden" name="action" value="reject" />
                   <input className="input" name="reason" placeholder="Reason for rejection" />
-                  <button className="btn-ghost w-full">Reject</button>
+                  <SubmitButton variant="secondary" className="w-full">Reject</SubmitButton>
                 </form>
               </div>
             )}
@@ -100,7 +101,7 @@ export default async function Admin({ searchParams }: { searchParams: Promise<{ 
               <form action={adminAction}>
                 <input type="hidden" name="id" value={l.meta.id} />
                 <input type="hidden" name="action" value="paid" />
-                <button className="btn w-full">Mark {fmt(l.payout)} paid to lister</button>
+                <SubmitButton className="w-full">Mark {fmt(l.payout)} paid to lister</SubmitButton>
               </form>
             )}
           </div>

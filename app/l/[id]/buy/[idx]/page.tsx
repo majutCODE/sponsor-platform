@@ -1,3 +1,4 @@
+import SubmitButton from "@/components/SubmitButton";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { buyTile } from "@/app/actions";
@@ -27,7 +28,7 @@ export default async function BuyPage({ params, searchParams }: { params: Promis
       </div>
       <div>
         <Link href={`/l/${id}`} className="text-sm text-indigo-600 hover:underline">← {l.meta.title}</Link>
-        <h1 className="mt-2 text-2xl font-bold tracking-tight">Sponsor tile #{idx + 1}</h1>
+        <h1 className="mt-2 text-2xl font-semibold">Sponsor tile #{idx + 1}</h1>
         {error && <div className="mt-4"><Notice>{error}</Notice></div>}
         <form action={buyTile} className="card mt-4 space-y-4">
           <input type="hidden" name="id" value={id} />
@@ -61,7 +62,7 @@ export default async function BuyPage({ params, searchParams }: { params: Promis
             <input type="checkbox" name="agree" required className="mt-1" />
             I own the rights to this logo. My payment is held until the lister proves the logo is on the object.
           </label>
-          <button className="btn w-full">Pay {fmt(l.meta.tilePrice)}</button>
+          <SubmitButton className="w-full">Pay {fmt(l.meta.tilePrice)}</SubmitButton>
         </form>
       </div>
     </div>
