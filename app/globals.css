@@ -1,18 +1,20 @@
 @import "tailwindcss";
 @import "../components/arc/foundation.css";
+@import "@fontsource-variable/bricolage-grotesque/wght.css";
 
 /* Map Tailwind's palette onto Arc tokens so every page shares one system. */
 @theme inline {
-  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Bricolage Grotesque Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Bricolage Grotesque Variable", sans-serif;
   --color-stone-50: var(--surface-muted);
-  --color-stone-100: var(--neutral-3);
+  --color-stone-100: var(--surface-muted);
   --color-stone-200: var(--border);
   --color-stone-300: var(--border-strong);
-  --color-stone-400: var(--neutral-6);
+  --color-stone-400: var(--text-muted);
   --color-stone-500: var(--text-secondary);
   --color-stone-600: var(--text-secondary);
-  --color-stone-700: var(--neutral-9);
-  --color-stone-800: var(--neutral-10);
+  --color-stone-700: var(--ink-2);
+  --color-stone-800: var(--ink-2);
   --color-stone-900: var(--foreground);
   --color-indigo-50: var(--accent-subtle);
   --color-indigo-200: color-mix(in oklab, var(--accent) 30%, transparent);
@@ -20,35 +22,84 @@
   --color-indigo-600: var(--accent);
   --color-indigo-700: var(--accent-strong);
   --color-indigo-900: var(--accent-strong);
+  /* shadcn token names used by Watermelon UI blocks, pointed at Arc tokens. */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--surface-raised);
+  --color-card-foreground: var(--foreground);
+  --color-popover: var(--surface-raised);
+  --color-popover-foreground: var(--foreground);
+  --color-muted: var(--surface-muted);
+  --color-muted-foreground: var(--text-secondary);
+  --color-primary: var(--accent);
+  --color-primary-foreground: var(--accent-foreground);
+  --color-secondary: var(--surface-muted);
+  --color-secondary-foreground: var(--foreground);
+  --color-accent: var(--surface-muted);
+  --color-accent-foreground: var(--foreground);
+  --color-border: var(--border);
+  --color-input: var(--border);
+  --color-ring: var(--accent);
+  --color-destructive: var(--danger);
 }
 
-/* Tighter panels read less "template"; inner radii derive from this (outer minus padding). */
-:root { --radius-panel: 1.25rem; --font-geist: var(--font-geist-sans); --font-inter: var(--font-geist-sans); }
-body { background: var(--background); color: var(--foreground); font-family: var(--font-sans); letter-spacing: -0.006em; }
-h1, h2, h3 { font-family: var(--font-display); letter-spacing: -0.025em; }
+/* Sticker-bomb design language: cream paper, ink outlines, hard offset shadows,
+   pill buttons and a small set of loud sticker colours. Overrides Arc defaults. */
+:root {
+  --background: #fff6e5;
+  --surface: #fffaf0;
+  --surface-raised: #ffffff;
+  --surface-muted: #f6ead2;
+  --foreground: #1d1a16;
+  --ink-2: #35302a;
+  --text-secondary: #4b453c;
+  --text-muted: #6f675b;
+  --border: #1d1a16;
+  --border-subtle: #e6d8bd;
+  --border-strong: #1d1a16;
+  --accent: #ff5a36;
+  --accent-strong: #e8431f;
+  --accent-subtle: rgb(255 90 54 / .12);
+  --accent-foreground: #ffffff;
+  --control-on: #1d1a16;
+  --s-lime: #c6f45b;
+  --s-yellow: #ffd23f;
+  --s-pink: #ff8fd1;
+  --s-blue: #2b6cff;
+  --radius-panel: 22px;
+  --radius-control: 999px;
+  --radius-surface: 28px;
+  --font-geist: "Bricolage Grotesque Variable";
+  --font-inter: "Bricolage Grotesque Variable";
+}
+body { background: var(--background); color: var(--foreground); font-family: var(--font-sans); font-size: 16px; }
+h1, h2, .display { font-family: var(--font-display); font-weight: 800; letter-spacing: -0.035em; line-height: .98; }
+h3 { font-weight: 700; letter-spacing: -0.01em; }
+::selection { background: var(--s-lime); color: var(--foreground); }
+.hl { background: var(--s-lime); padding: 0 .18em; border-radius: .22em; display: inline-block; transform: rotate(-2deg); }
+.sticker { border: 2.5px solid var(--foreground); box-shadow: 4px 4px 0 var(--foreground); }
 
 .btn, .btn-ghost {
-  @apply inline-flex items-center justify-center gap-2 whitespace-nowrap px-4 text-sm font-medium transition active:scale-[0.97] disabled:opacity-50;
-  min-height: var(--control-height-md, 2.5rem); border-radius: var(--radius-pill); border: 1px solid transparent;
+  @apply inline-flex items-center justify-center gap-2 whitespace-nowrap px-5 text-sm font-bold transition disabled:opacity-50;
+  min-height: var(--control-height-md, 2.75rem); border-radius: 999px; border: 2.5px solid var(--foreground);
 }
-.btn { background: var(--foreground); color: var(--background); }
-.btn:hover { opacity: .9; box-shadow: var(--shadow-resting); }
-.btn-ghost { background: var(--surface); color: var(--foreground); border-color: var(--border); }
-.btn-ghost:hover { background: var(--surface-muted); }
-.btn-accent { background: var(--accent); color: var(--accent-foreground); box-shadow: 0 1px 0 rgb(255 255 255 / .18) inset, 0 6px 16px -6px var(--accent); }
-.btn-accent:hover { background: var(--accent-strong); opacity: 1; }
+.btn { background: var(--foreground); color: var(--background); box-shadow: 3px 3px 0 var(--accent); }
+.btn-ghost { background: var(--surface); color: var(--foreground); }
+.btn-accent { background: var(--accent); color: var(--accent-foreground); box-shadow: 4px 4px 0 var(--foreground); }
+.btn:hover, .btn-ghost:hover { transform: translate(-1px, -1px); }
+.btn:active, .btn-ghost:active { transform: translate(2px, 2px); box-shadow: 0 0 0 var(--foreground); }
 
 .input {
-  @apply mt-1.5 block w-full px-3.5 py-2.5 text-sm transition;
-  background: var(--surface); border: 1px solid var(--border); border-radius: calc(var(--radius-control) * .7);
+  @apply mt-1.5 block w-full px-4 py-2.5 text-sm transition;
+  background: #fff; border: 2px solid var(--foreground); border-radius: 14px;
 }
-.input:hover { border-color: var(--border-strong); }
-.input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-subtle); }
+.input:focus { outline: none; box-shadow: 3px 3px 0 var(--accent); }
 .input[type="file"] { @apply py-2; }
-.input[type="file"]::file-selector-button { @apply mr-3 rounded-full border-0 px-3 py-1 text-xs font-medium; background: var(--surface-muted); color: var(--foreground); }
-.label { @apply block text-sm font-medium; color: var(--foreground); }
+.input[type="file"]::file-selector-button { @apply mr-3 rounded-full px-3 py-1 text-xs font-bold; border: 2px solid var(--foreground); background: var(--s-yellow); color: var(--foreground); }
+.label { @apply block text-sm font-bold; color: var(--foreground); }
 .card {
-  @apply p-6; background: var(--surface-raised); border: 1px solid var(--border);
-  border-radius: var(--radius-panel); box-shadow: var(--shadow-resting);
+  @apply p-6; background: var(--surface-raised); border: 2.5px solid var(--foreground);
+  border-radius: var(--radius-panel); box-shadow: 5px 5px 0 var(--foreground);
 }
-input[type="checkbox"] { accent-color: var(--foreground); width: 1rem; height: 1rem; }
+input[type="checkbox"] { accent-color: var(--accent); width: 1.1rem; height: 1.1rem; }
+@layer base { *, ::before, ::after { border-color: var(--color-border); } }

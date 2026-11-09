@@ -8,13 +8,13 @@ type Sponsor = { name: string; bg: string; fg: string; font: string };
 
 // Fictional example brands, shown only to illustrate sponsored tiles.
 const SPONSORS: (Sponsor | null)[] = [
-  { name: "NOVA", bg: "#111111", fg: "#ffffff", font: "800 100px Geist, sans-serif" },
+  { name: "NOVA", bg: "#c6f45b", fg: "#1d1a16", font: "800 104px 'Bricolage Grotesque Variable', sans-serif" },
   null,
-  { name: "pulse", bg: "#7747ff", fg: "#ffffff", font: "700 100px Geist, sans-serif" },
-  { name: "Orbit", bg: "#ffffff", fg: "#0562ef", font: "700 100px Georgia, serif" },
+  { name: "pulse", bg: "#ffffff", fg: "#1d1a16", font: "800 104px 'Bricolage Grotesque Variable', sans-serif" },
+  { name: "orbit", bg: "#ff8fd1", fg: "#1d1a16", font: "800 104px 'Bricolage Grotesque Variable', sans-serif" },
   null,
-  { name: "KITE", bg: "#f3ad20", fg: "#20190d", font: "900 100px Geist, sans-serif" },
-  { name: "lumen", bg: "#ffffff", fg: "#111111", font: "600 100px Geist, sans-serif" },
+  { name: "KITE", bg: "#ffd23f", fg: "#1d1a16", font: "800 104px 'Bricolage Grotesque Variable', sans-serif" },
+  { name: "lumen", bg: "#1d1a16", fg: "#fff6e5", font: "800 104px 'Bricolage Grotesque Variable', sans-serif" },
   null,
 ];
 
@@ -39,7 +39,7 @@ function logoTexture(s: Sponsor | null, price: string) {
     g.strokeStyle = "rgba(255,255,255,0.75)";
     g.strokeRect(8, 8, c.width - 16, c.height - 16);
     g.fillStyle = "rgba(255,255,255,0.9)";
-    g.font = "600 76px Geist, sans-serif";
+    g.font = "800 80px 'Bricolage Grotesque Variable', sans-serif";
     g.textAlign = "center";
     g.textBaseline = "middle";
     g.fillText(price, c.width / 2, c.height / 2 + 2);
@@ -150,7 +150,7 @@ function Car() {
   return (
     <group ref={ref} position={[0.05, 0, 0]}>
       <mesh geometry={body} castShadow>
-        <meshPhysicalMaterial color="#2f4a72" roughness={0.25} metalness={0.55} clearcoat={1} clearcoatRoughness={0.08} />
+        <meshPhysicalMaterial color="#ff5a36" roughness={0.3} metalness={0.2} clearcoat={1} clearcoatRoughness={0.08} />
       </mesh>
       <mesh geometry={glass}>
         <meshPhysicalMaterial color="#10141b" roughness={0.05} metalness={0.5} clearcoat={1} />
@@ -175,7 +175,7 @@ function Car() {
 
 export default function CarScene() {
   return (
-    <Canvas shadows dpr={[1, 2]} camera={{ position: [1.1, 1.75, 7], fov: 30 }} gl={{ antialias: true }}>
+    <Canvas shadows dpr={[1, 2]} camera={{ position: [1.6, 1.9, 7.6], fov: 30 }} gl={{ antialias: true }}>
       <Environment resolution={256}>
         <Lightformer intensity={2.5} position={[0, 5, 0]} rotation-x={Math.PI / 2} scale={[10, 4, 1]} />
         <Lightformer intensity={1.5} position={[0, 1, 6]} scale={[12, 1.2, 1]} />
