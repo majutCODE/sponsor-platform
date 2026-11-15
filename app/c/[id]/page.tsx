@@ -11,7 +11,7 @@ export default async function CreatorPage({ params, searchParams }: { params: Pr
   const sp = await searchParams;
   const c = await getCreator(id);
   if (!c || !checkCreatorToken(c, sp.t)) {
-    return <div className="card mx-auto max-w-md text-center">This creator link is invalid. <Link href="/creators/apply" className="text-indigo-600">Apply as a creator</Link></div>;
+    return <div className="card mx-auto max-w-md text-center">This creator link is invalid. <Link href="/creators/apply" className="link">Apply as a creator</Link></div>;
   }
   const h = await headers();
   const url = `${h.get("x-forwarded-proto") ?? "https"}://${h.get("x-forwarded-host") ?? h.get("host")}/c/${id}?t=${sp.t}`;
@@ -23,7 +23,7 @@ export default async function CreatorPage({ params, searchParams }: { params: Pr
       {sp.new && (
         <Notice kind="info" title="Application received">
           <div>Save this private link. It is how you check your status, list objects and get paid.</div>
-          <code className="mt-2 block break-all rounded-lg border border-stone-200 bg-white px-2.5 py-1.5 text-xs">{url}</code>
+          <code className="mt-2 block break-all rounded-[10px] border-2 border-stone-900 bg-white px-2.5 py-1.5 text-xs">{url}</code>
         </Notice>
       )}
       {sp.error && <Notice>{sp.error}</Notice>}
@@ -31,7 +31,7 @@ export default async function CreatorPage({ params, searchParams }: { params: Pr
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
             <div className="text-sm text-stone-500">Creator</div>
-            <h1 className="text-3xl font-semibold">{c.meta.name}</h1>
+            <h1 className="text-4xl sm:text-5xl">{c.meta.name}</h1>
             <div className="mt-1 text-sm text-stone-600">{fmtFollowers(c.meta.followers)} followers on {c.meta.platform} · {tierOf(c.meta.followers)}</div>
           </div>
           <span className="sticker rounded-full px-3 py-1 text-sm font-bold" style={{ background: c.status === "verified" ? "var(--s-lime)" : c.status === "pending" ? "var(--s-yellow)" : "#fff" }}>{CREATOR_STATUS_LABEL[c.status]}</span>
@@ -47,12 +47,12 @@ export default async function CreatorPage({ params, searchParams }: { params: Pr
 
       {listings.length > 0 && (
         <div className="card">
-          <div className="mb-2 font-semibold">Your listings</div>
-          <ul className="divide-y divide-stone-200 text-sm">
+          <div className="mb-2 text-lg font-extrabold">Your listings</div>
+          <ul className="rows text-sm">
             {listings.map((l) => (
               <li key={l.meta.id} className="flex flex-wrap items-center justify-between gap-3 py-2.5">
-                <span className="flex items-center gap-2"><span className="font-semibold">{l.meta.title}</span><StatusBadge status={l.status} /></span>
-                <span className="flex items-center gap-3"><span className="tabular-nums text-stone-600">{l.sold}/{l.total} spots · {fmt(l.payout)}</span><Link href={`/l/${l.meta.id}/manage?t=${sp.t}`} className="font-semibold text-indigo-600 hover:underline">Manage</Link></span>
+                <span className="flex items-center gap-2"><span className="text-lg font-extrabold">{l.meta.title}</span><StatusBadge status={l.status} /></span>
+                <span className="flex items-center gap-3"><span className="tabular-nums text-stone-600">{l.sold}/{l.total} spots · {fmt(l.payout)}</span><Link href={`/l/${l.meta.id}/manage?t=${sp.t}`} className="link">Manage</Link></span>
               </li>
             ))}
           </ul>

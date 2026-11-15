@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import "./globals.css";
+import MobileNav from "@/components/MobileNav";
 
 export const metadata: Metadata = {
   title: "TileSponsor",
@@ -38,7 +39,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               {NAV.map((n) => (
                 <Link key={n.href} href={n.href} className="hidden font-semibold text-stone-900 transition hover:text-[var(--accent)] sm:inline">{n.label}</Link>
               ))}
-              <Link href="/creators/apply" className="btn !min-h-9">Apply as a creator</Link>
+              <Link href="/creators/apply" className="btn !min-h-9 max-sm:!hidden">Apply as a creator</Link>
+              <MobileNav links={NAV} />
             </nav>
           </div>
         </header>

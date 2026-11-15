@@ -7,6 +7,7 @@ import HeroCar from "@/components/hero/HeroCar";
 import Progress from "@/components/arc/progress/progress";
 import EmptyState from "@/components/arc/empty-state/empty-state";
 import { CATEGORIES, categoryOf } from "@/lib/categories";
+import Countdown from "@/components/Countdown";
 import BrandsFeature from "@/components/home/BrandsFeature";
 import { Faq5 } from "@/components/ui/faq-5";
 
@@ -118,9 +119,17 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ c
                 <div className="flex items-start justify-between gap-2 px-1 pt-4">
                   <div>
                     <div className="display text-xl">{l.meta.title}</div>
-                    <div className="mt-0.5 text-sm text-stone-600">Bids from <span className="tabular-nums">{fmt(l.meta.startBid).replace(/\.00$/, "")}</span> · {TERMS[l.meta.term].label} · {l.meta.listerName}</div>
+                    <div className="mt-0.5 text-sm text-stone-600">{TERMS[l.meta.term].label} · {l.meta.listerName}</div>
                   </div>
                   <StatusBadge status={l.status} />
+                </div>
+                <div className="flex flex-wrap items-center gap-2 px-1 pt-3">
+                  {l.status === "live" && <span className="pill" style={{ background: "var(--s-yellow)" }}>Ends in <Countdown compact to={l.meta.closesAt} /></span>}
+                  {l.status === "upcoming" && <span className="pill">Opens in <Countdown compact to={l.meta.launchAt} /></span>}
+                  <span className="pill">
+                    {l.sold > 0 ? "Top bid " : "Bids from "}
+                    <span className="tabular-nums">{fmt(l.sold > 0 ? Math.max(...Object.values(l.tiles).map((t) => t.amount)) : l.meta.startBid).replace(/\.00$/, "")}</span>
+                  </span>
                 </div>
                 <div className="px-1 pb-1 pt-4">
                   <Progress value={l.sold} max={l.total} label={`${l.sold} of ${l.total} spots ${l.confirmed ? "sponsored" : "with bids"}`} />
@@ -135,8 +144,8 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ c
       </div>
 
       <section className="sticker -mx-1 rounded-[28px] bg-[var(--s-blue)] px-6 py-14 text-white sm:px-12 sm:py-16" style={{ boxShadow: "8px 8px 0 var(--foreground)" }}>
-        <div className="grid gap-8 md:grid-cols-12 md:items-end">
-          <h2 className="text-5xl text-balance sm:text-6xl md:col-span-8">Got an audience and something they see? Get it sponsored.</h2>
+        <div className="grid grid-cols-[minmax(0,1fr)] gap-8 md:grid-cols-12 md:items-end">
+          <h2 className="text-[2.6rem] text-balance sm:text-6xl md:col-span-8">Got an audience and something they see? Get it sponsored.</h2>
           <div className="md:col-span-4 md:text-right">
             <Link href="/creators/apply" className="btn btn-accent !min-h-12 !px-6 text-[15px]">Apply as a creator</Link>
           </div>

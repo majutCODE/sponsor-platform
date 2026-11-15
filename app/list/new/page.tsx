@@ -16,7 +16,7 @@ export default async function NewListing({ searchParams }: { searchParams: Promi
   if (!ok || creator.status !== "verified") {
     return (
       <div className="card mx-auto max-w-xl text-center">
-        <h1 className="text-3xl font-semibold">Listing is for verified creators</h1>
+        <h1 className="text-4xl sm:text-5xl">Listing is for verified creators</h1>
         <p className="mt-3 text-stone-600">
           {ok && creator.status === "pending"
             ? "Your application is still being reviewed. You can list as soon as you are verified."
@@ -32,7 +32,7 @@ export default async function NewListing({ searchParams }: { searchParams: Promi
   const min = MIN_BID / 100;
   return (
     <div className="mx-auto max-w-2xl">
-      <h1 className="text-3xl font-semibold">List an object</h1>
+      <h1 className="text-4xl sm:text-5xl">List an object</h1>
       <p className="mt-2 text-stone-600">
         Brands bid on sticker spots while your timer runs. The highest bid on each spot wins. We post you the stickers, you put them on, and we pay you
         {" "}{100 - FEE_RATE * 100}% once a photo shows they are on.

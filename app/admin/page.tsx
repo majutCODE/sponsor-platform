@@ -16,7 +16,7 @@ export default async function Admin({ searchParams }: { searchParams: Promise<{ 
   if (!(await isAdmin())) {
     return (
       <div className="mx-auto max-w-sm">
-        <h1 className="text-2xl font-semibold">Admin</h1>
+        <h1 className="text-4xl sm:text-5xl">Admin</h1>
         {error && <div className="mt-4"><Notice>{error}</Notice></div>}
         {!adminPassword() ? (
           <p className="mt-4 text-sm text-stone-600">Set the ADMIN_PASSWORD environment variable to enable admin.</p>
@@ -42,7 +42,7 @@ export default async function Admin({ searchParams }: { searchParams: Promise<{ 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-semibold">Admin</h1>
+        <h1 className="text-4xl sm:text-5xl">Admin</h1>
         <form action={adminLogout}><button className="btn-ghost">Log out</button></form>
       </div>
       {error && <Notice>{error}</Notice>}
@@ -54,19 +54,19 @@ export default async function Admin({ searchParams }: { searchParams: Promise<{ 
           ["Platform revenue", fmt(totals.fees)],
           ["Payouts owed", fmt(owed)],
         ].map(([k, v]) => (
-          <div key={k} className="card"><div className="text-xs text-stone-500">{k}</div><div className="mt-1 text-2xl font-semibold tabular-nums">{v}</div></div>
+          <div key={k} className="card"><div className="text-xs text-stone-500">{k}</div><div className="display mt-1 text-3xl tabular-nums">{v}</div></div>
         ))}
       </div>
 
-      <h2 className="text-xl font-semibold">Creators</h2>
+      <h2 className="text-3xl">Creators</h2>
       {creators.length === 0 && <div className="card text-stone-600">No applications yet.</div>}
       {[...pending, ...others].map((c) => (
         <div key={c.meta.id} id={`c-${c.meta.id}`} className="card grid gap-4 md:grid-cols-[1fr_260px]">
           <div className="space-y-1 text-sm">
             <div className="flex flex-wrap items-center gap-2">
-              <span className="text-base font-semibold">{c.meta.name}</span>
+              <span className="text-lg font-extrabold">{c.meta.name}</span>
               <span className="rounded-full border-2 border-stone-900 bg-white px-2 py-0.5 text-xs font-bold">{CREATOR_STATUS_LABEL[c.status]}</span>
-              {c.strikes > 0 && <span className="rounded-full bg-red-100 px-2 py-0.5 text-xs font-bold text-red-800">{c.strikes} strike{c.strikes > 1 ? "s" : ""}</span>}
+              {c.strikes > 0 && <span className="rounded-full border-2 border-stone-900 bg-[var(--s-pink)] px-2 py-0.5 text-xs font-bold">{c.strikes} strike{c.strikes > 1 ? "s" : ""}</span>}
             </div>
             <div className="text-stone-500">{c.meta.email} · {fmtFollowers(c.meta.followers)} on {c.meta.platform} ({tierOf(c.meta.followers)})</div>
             <div className="break-all">{c.meta.handle}</div>
@@ -100,15 +100,15 @@ export default async function Admin({ searchParams }: { searchParams: Promise<{ 
         </div>
       ))}
 
-      <h2 className="pt-4 text-xl font-semibold">Listings</h2>
+      <h2 className="pt-4 text-3xl">Listings</h2>
       {listings.length === 0 && <div className="card text-stone-600">No listings yet.</div>}
       {listings.map((l) => (
         <div key={l.meta.id} id={l.meta.id} className="card grid gap-5 md:grid-cols-[200px_1fr_260px]">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={l.meta.imageUrl} alt="" className="w-full rounded-lg object-cover" />
+          <img src={l.meta.imageUrl} alt="" className="shot w-full object-cover" />
           <div className="space-y-2 text-sm">
             <div className="flex flex-wrap items-center gap-2">
-              <Link href={`/l/${l.meta.id}`} className="text-base font-semibold hover:underline">{l.meta.title}</Link>
+              <Link href={`/l/${l.meta.id}`} className="text-lg font-extrabold hover:underline">{l.meta.title}</Link>
               <StatusBadge status={l.status} />
             </div>
             <div className="text-stone-500">{l.meta.listerName} · {l.creator?.meta.email} · {TERMS[l.meta.term].label}</div>
@@ -132,10 +132,10 @@ export default async function Admin({ searchParams }: { searchParams: Promise<{ 
             {l.latestProof ? (
               <a href={l.latestProof.proofUrl} target="_blank" rel="noopener noreferrer">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={l.latestProof.proofUrl} alt="Proof" className="w-full rounded-lg ring-1 ring-stone-200" />
+                <img src={l.latestProof.proofUrl} alt="Proof" className="shot w-full" />
               </a>
             ) : (
-              <div className="rounded-lg border border-dashed border-stone-300 p-4 text-center text-xs text-stone-500">No proof yet</div>
+              <div className="rounded-[14px] border-2 border-dashed border-stone-900 p-4 text-center text-xs text-stone-500">No proof yet</div>
             )}
             {l.status === "in_review" && (
               <div className="space-y-2">

@@ -18,3 +18,12 @@ export const fmtDateTime = (ts: number) =>
   new Intl.DateTimeFormat("en-GB", { timeZone: TZ, day: "numeric", month: "short", hour: "2-digit", minute: "2-digit", hourCycle: "h23" }).format(ts);
 
 export const fmtDate = (ts: number) => new Intl.DateTimeFormat("en-GB", { timeZone: TZ, day: "numeric", month: "short", year: "numeric" }).format(ts);
+
+/** "just now", "12m ago", "3h ago", "2d ago". */
+export function ago(ts: number, now = Date.now()) {
+  const m = Math.floor((now - ts) / 60000);
+  if (m < 1) return "just now";
+  if (m < 60) return `${m}m ago`;
+  if (m < 1440) return `${Math.floor(m / 60)}h ago`;
+  return `${Math.floor(m / 1440)}d ago`;
+}
