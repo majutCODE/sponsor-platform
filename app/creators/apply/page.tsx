@@ -6,7 +6,7 @@ export default async function Apply({ searchParams }: { searchParams: Promise<{ 
   const { error } = await searchParams;
   return (
     <div className="mx-auto max-w-2xl">
-      <h1 className="text-3xl font-semibold">Apply as a creator</h1>
+      <h1 className="text-4xl sm:text-5xl">Apply as a creator</h1>
       <p className="mt-2 text-stone-600">
         TileSponsor is for verified creators. Tell us who you are and where your audience is. We review every application by hand, so there is no follower minimum.
       </p>
